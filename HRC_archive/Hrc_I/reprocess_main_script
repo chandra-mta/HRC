@@ -1,0 +1,10 @@
+
+rm -rf param 
+mkdir param
+
+cd /data/aschrc6/wilton/isobe/Project9/Exc/
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+/data/aschrc6/wilton/isobe/Project9/Scripts/Hrc_I/re_process_hrc_data.py
+ 

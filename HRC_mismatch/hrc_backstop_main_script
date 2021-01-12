@@ -1,0 +1,17 @@
+cd /data/aschrc6/wilton/isobe/Project2/Exc/
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+/data/aschrc6/wilton/isobe/Project2/Script3.6/extract_backstop_comm.py
+echo "Data Extracted"
+
+/data/aschrc6/wilton/isobe/Project2/Script3.6/check_cmd_diff.py
+echo "Command Check Done"
+
+/data/aschrc6/wilton/isobe/Project2/Script3.6/comp_voltage.py
+echo "Voltage Check Done"
+
+/data/aschrc6/wilton/isobe/Project2/Script3.6/check_dither_diff.py
+echo "Dither Check Done"
+
+/data/aschrc6/wilton/isobe/Project2/Script3.6/send_email_out.py

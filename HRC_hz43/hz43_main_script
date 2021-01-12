@@ -1,0 +1,13 @@
+cd /data/aschrc6/wilton/isobe/Project8/HZ43/Exc
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/analyze_hz43_data.py
+
+/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_hz43_trend_plots.py
+/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_count_rate_plots.py
+/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_profile_plot.py
+
+/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_html_page.py
+
+/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/sendout_email.py

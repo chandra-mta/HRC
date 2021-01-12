@@ -1,0 +1,83 @@
+
+####################################
+Monitoring the UV/Ion Shield Health
+####################################
+
+This task was originally done by M. Juda and his results up to the end of 2016 are in:
+    http://cxc.harvard.edu/contrib/juda/memos/uvis_monitor/index.html
+
+========
+Scripts:
+========
+vega_wrap_script
+vega_main_script
+----------------
+environment setting script which run compute_evga_counts.py
+
+compute_vega_count.py
+----------------------
+extract data from the database, compute statistics, and update Vega Monitoring 
+the UV/Ion Shield Health page
+
+    input:      none, but read from /data/mta4/obs_ss/sot_ocat.out
+    output:     <html_dir>/vega_vis_montior.html
+                <html_dir>/Plots/*.png
+                <data_dir>/hrc_i_results etc
+
+extract_vega_data.py
+--------------------
+extract vega calibration data and create a list of them
+
+    input:      none but read from /data/mta4/obs_ss/sot_ocat.out
+    output:     <house_keeping>/hrc_i_list
+                <house_keeping>/hrc_s_list
+                chk 0 or 1. if 1, it found new data. otherwise it returns 0
+
+adjust_vega_position.py
+-----------------------
+adjuct Vega postion according to the proper motion
+
+    input:      year    --- fractional year
+    output:     [ra, dec]
+
+create_html_page.py
+-------------------
+update vega_vis_montior.html page
+
+    input: none, but read from <data_dir>/hrc_*_results
+    output: <html_dir>/vega_vis_montior.html
+            <html_dir>/Plots/*.png
+
+===========
+Directories:
+===========
+'/data/aschrc6/wilton/isobe/Project8/Vega/'                          :main_dir
+'/data/aschrc6/wilton/isobe/Project8/Vega/Scripts/'                  :bin_dir
+'/data/aschrc6/wilton/isobe/Project8/Vega/Scripts/house_keeping/'    :house_keeping
+'/data/aschrc6/wilton/isobe/Project8/Vega/Data/'                     :data_dir
+'/data/aschrc6/wilton/isobe/Project8/Vega/Exc/'                      :exc_dir
+'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/Vega/'        :html_dir
+'/data/mta/Script/Python3.6/MTA/'                                    :mta_dir
+
+=============
+house_keeping
+=============
+In hosue_keeping directory:
+vega_pos        --- Vega coordinates and propoer motion @ year 2000
+dir_list        --- directory link list
+vega_template   --- html page template
+hrc_i_list      --- a list of vega hrc i observations of past
+hrc_s_list      --- a list of vega hrc s observations of past
+chk_save        --- an indicator of whether new observation is found today; 0: no 1:yes
+
+=====
+html:
+=====
+http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/Vega/vega_vis_montior.html
+
+=========
+Cron Job:
+=========
+on ascda3 as isobe:
+14 2 * * * cd //data/aschrc6/wilton/isobe/Project8/Vega/Exc/; /data/aschrc6/wilton/isobe/Project8/Vega/Scripts/vega_wrap_script > /home/isobe/Logs/vega_logs.cron
+

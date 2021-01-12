@@ -1,0 +1,49 @@
+
+#################
+Occurences of SSC
+#################
+
+This set of scripts trend the occarences of two following cases:
+    * FIFO reset which corrupts a frame of telemetry
+    * MSID 2SMTRATM is >= 50C or <= -20C
+
+Scripts
+--------
+ssc_wrap_script
+ssc_main_script         ---- environment setting scripts
+
+find_ssc_occurences.py  ---- find the error occurence cases for each month and update
+                             database
+    input:  ska database
+    output: <data_dir>/fifo_data  <data_dir>/temp_data
+
+plot_ssc_data.py        ---- plot the trends of fifo and temp data
+    input: <data_dir>/fifo_data  <data_dir>/temp_data
+    output: <html_dir>/fifo_data_plot.png <html_dir>/temp_data_plot.png
+
+Directories
+----------
+'/data/aschrc6/wilton/isobe/Project10/'                         : main_dir
+'/data/aschrc6/wilton/isobe/Project10/Scripts/'                 : bin_dir
+'/data/aschrc6/wilton/isobe/Project10/Scripts/house_keeping/'   : house_keeping
+'/data/aschrc6/wilton/isobe/Project10/Data/'                    : data_dir
+'/data/aschrc6/wilton/isobe/Project10/Exc/'                     : exc_dir
+'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/SSC_trend/'            : html_dir
+'/data/mta/Script/Python3.6/MTA/'                               : mta_dir
+
+Envirnment Settings
+-------------------
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+
+Web Site
+--------
+http://cxc.cfa.harvard.edu/contrib/cxchrc/SSC_trend/ssc_trending.html
+
+Cronjob
+-------
+user: isobe
+cpu:  ascda3
+
+35 5 3 * *  cd /data/aschrc6/wilton/isobe/Project10/Scripts; /data/aschrc6/wilton/isobe/Project10/Scripts/ssc_wrap_script > /home/isobe/ssc_trend_log.cron 
+

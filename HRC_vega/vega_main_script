@@ -1,0 +1,8 @@
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+cd /data/aschrc6/wilton/isobe/Project8/Vega/Exc/
+
+/data/aschrc6/wilton/isobe/Project8/Vega/Scripts/compute_vega_count.py
+
+/data/aschrc6/wilton/isobe/Project8/Vega/Scripts/create_html_page.py

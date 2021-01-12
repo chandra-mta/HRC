@@ -1,0 +1,1 @@
+TERM=dummy; export TERM; /bin/tcsh < /data/aschrc6/wilton/isobe/Project1/Scripts/stowed_main_script

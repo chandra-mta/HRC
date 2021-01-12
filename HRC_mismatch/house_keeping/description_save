@@ -1,0 +1,55 @@
+p15cast   #--- +15V LVPS on/off
+sptpast   #--- Spect Det Top Plate HV Step
+n15cast   #--- -15V LVPS on/off
+spbpast   #--- Spect Det Bottom Plate HV Step
+p24cast   #--- +24V LVPS on/off
+imtpast   #--- Imaging Det Top Plate HV Step
+imbpast   #--- Imaging Det Bottom Plate HV Step
+scthast   #--- Last Motor Step Load
+fcpuast   #--- Forced Coarse Position - U
+fcpvast   #--- Forced Coarse Position - V
+cbhuast   #--- Blanking High Limit - U
+cbluast   #--- Blanking Low Limit - U
+cbhvast   #--- Blanking High Limit - V
+cblvast   #--- Blanking Low Limit - V
+wdthast   #--- Width Threshold Setting
+s1hvst    #--- Shield PMT 1 HV Setting
+s2hvst    #--- Shield PMT 2 HV Setting
+uldialv   #--- Upper Level Disc Setting
+lldialv   #--- Lower Level Disc Setting
+grdvalv   #--- Grid Bias Setting
+rsrfalv   #--- Range Switch Setting
+nymtast   #--- -Y SHUTTER MOTOR SELECT
+pymtast   #--- +Y SHUTTER MOTOR SELECT
+clmtast   #--- CALSRC MOTOR SELECT
+drmtast   #--- DOOR MOTOR SELECT
+almtast   #--- ALL MOTORS DESELECT
+mcmdars   #--- MOTION CONTROL MODE RESET
+mcnbamd   #--- MOVE N STEPS TWRD OPEN/MAX LS
+mcnaamd   #--- MOVE N STEPS TWRD CLOS/HOM LS
+mclbamd   #--- MOVE TO OPEN/MAX LIMIT SWITCH
+mclaamd   #--- MOVE TO CLOS/HOME LIM SWITCH
+mcpramd   #--- STEP FM HOME TO POS CTR VALU
+mdrvast   #--- MOTOR DRIVE ENABLE/DISABLE
+drotast   #--- SELECTED MTR OVERTEM PROT ENAB/DISA
+droiast   #--- SELECTED MTR OVERCUR PROT ENAB/DISA
+sflgast   #--- ENABLE/DISABLE STOP FLAGS/CLEAR STOP FLAGS
+oslsast   #--- OPEN/MAX SECON LIM SW ENAB/DISA
+oplsast   #--- OPEN/MAX PRIMARY LIM SW ENAB/DISA
+cslsast   #--- CLOS/HOME SECON LIM SW ENAB/DISA
+cplsast   #--- CLOS/HOME PRIMARY LIM SW ENAB/DISA
+clmdast   #--- CALIBRATION MODE ENABLE/DISABLE
+fifoavr   #--- DATA FIFO ENABLE/DISABLE
+obnlasl   #--- OBSERVING/NEXT-IN-LINE MODE SELECT
+spmdasl   #--- SPECT/IMG DETECTOR SPECT
+eblkavr   #--- EBLK VALIDITY ENABLE/DISABLE
+cblkavr   #--- CBLK VALIDITY ENABLE/DISABLE
+uldiavr   #--- ULD VALIDITY ENABLE/DISABLE
+wdthavr   #--- WIDTH VALIDITY ENABLE/DISABLE
+shldavr   #--- SHIELD VALIDITY ENABLE/DISABLE
+sponst    #--- SPECT DET HV ON/OFF
+spclst    #--- SPECT ILIM ENABLE/DISABLE
+s1onst    #--- SHIELD A HV ON/OFF
+imonst    #--- IMAGING DET HV ON/OFF
+imclst    #--- IMAGING ILIM ENABLE/DISABLE
+s2onst    #--- SHIELD B HV ON/OFF

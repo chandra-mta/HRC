@@ -1,0 +1,7 @@
+cd /data/aschrc6/wilton/isobe/Project1/Exc
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+
+/data/aschrc6/wilton/isobe/Project1/Scripts/run_hrc_stowed_background_monthly_update.py 
+

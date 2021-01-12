@@ -1,0 +1,8 @@
+cd /data/aschrc6/wilton/isobe/Project10/Scripts
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+/data/aschrc6/wilton/isobe/Project10/Scripts/find_ssc_occurences.py
+
+/data/aschrc6/wilton/isobe/Project10/Scripts/plot_ssc_data.py
+

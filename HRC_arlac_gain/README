@@ -1,0 +1,134 @@
+
+#############################
+Ar Lac PHA Distribution Trend
+#############################
+
+========
+Scripts
+========
+
+hrc_gain_wrap_script
+hrc_gain_main_script
+--------------------
+environment setting scripts
+
+hrc_gain_run.py
+---------------
+The main scripts to check whether bew Ar Lac observations are available 
+and run other scripts to update data and html pages.
+
+Input: none, but it needs access to:
+        /data/aschrc6/wilton/isobe/Project8/ArLac/Scripts/house_keeping/hrc_i_list
+        /data/aschrc6/wilton/isobe/Project8/ArLac/Scripts/house_keeping/hrc_s_list
+to check whether there are new data. ion shield scripts must be run before
+this script should be run.
+Output:
+    see below
+
+hrc_gain_fit_voigt.py
+---------------------
+extract hrc evt2 files and fit a normal distribution on pha values.
+input: hrc evt2 fits files downloaded from archive.
+output: <data_dir>/hrcf<obsid>_pha.dat.gz   --- a pha data for <obsid>
+        <data_dir>/fitting_results          --- a list of voigt profile fittings
+        <web_dir>/Trend_plots/Indivisual_Plots/hrcf<obsid>_gfits.png
+                                            --- a plot of pha data with fitted profile
+
+<mta_dir>/fit_voigt_profile.py
+------------------------------
+This script is used by hrc_gain_fit_voigt.py. for more details, please read:
+/data/mta/Script/Python_script2.7/fit_voigt_profile.py
+
+hrc_gain_trend_plot.py
+----------------------
+This script creates all trend plots and updates all html pages.
+input:
+    none, but read from <data_dir> and <web_dir>.
+output:
+    <web_dir>/arlac_energy_trend.html
+    <web_dir>/Trend_plots/Dist_Html/hrc_<inst>_radia_dist_year<year>.htnml
+
+        ---- These web pages has interactive plots.
+
+    <web_dir>/Trend_plots/enegy_fitting_result.html
+
+
+============
+Output Data
+============
+In the directory of <data_dir>:
+fitting_results ---- voigt profile fitting results
+    Columns:
+    * obisid
+    * date of observation (in the format of <yyyy>-<mm>-<dd>T<hh>:<mm>:<ss>
+    * starting time in seconds from 1998.1.1
+    * instrument, either HRC-I or HRC-S
+    * pointing RA in deg
+    * pointing DEC in deg
+    * difference between the source and pointing RA in arcmin
+    * difference between the source and pointing DEC in arcmin
+    * radial difference in arcmin
+    * median pha position
+    * voigt estimated center
+    * voigt estimated amplification
+    * voigt estimated FWHM
+    * pointing rolling angle
+    * focal length
+    * defocus
+    * sim x
+    * sim y 
+    * sim z
+    * voigt fitting param alphaD
+    * voigt fitting param alphaL
+    * voigt fitting param center
+    * voigt fitting param I
+    * voigt fitting param a_back
+    * voigt fitting param b_back
+
+hrcf<obsid>_pha.dat.gz  --- the pha histogram data for <obsid>
+
+===========
+Directories
+===========
+
+'/data/aschrc6/wilton/isobe/Project8/ArLac/'                            : main_dir
+'/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts2/'                   : bin_dir
+'/data/aschrc6/wilton/isobe/Project8/ArLac/Exc2/'                       : exc_dir
+'/data/aschrc6/wilton/isobe/Project8/ArLac/Data2/'                      : data_dir
+'/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts2/house_keeping/'     : house_keeping
+'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/ArLac/'          : web_dir
+'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/ArLac/Trend_plots/'   : plot_dir
+'/data/mta/Script/Python_script2.7/'                                    : mta_dir
+
+
+in <house_keeping>:
+dir_list_py         ---- a list above
+hrc_i_list          ---- the last ar lac hrc i calibration observation list
+hrc_s_list          ---- the last ar lac hrc s calibration observation list
+hrc_trend_top_part  --- a template for the main html page
+hrc_trend_bottom    --- a template for the main html page (bottom part)
+enegy_fitting_result_top    --- a template for the voigt profile page (top part)
+java_script_deposit --- a java script deposit
+
+
+===================
+Environment Setting
+===================
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+The scripts internally use ciao tools, but the setting is not grolbal one.
+
+=========
+Web Pages
+=========
+http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/arlac_energy_trend.html
+physical location: /proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/ArLac/
+
+=========
+cron job
+=========
+on ascda3 with isobe:
+
+40 2 * * * cd //data/aschrc6/wilton/isobe/Project8/ArLac/Exc2/; /data/aschrc6/wilton/isobe/Project8/ArLac/Scripts2/hrc_gain_wrap_script > /home/isobe/Logs/arlac_logs.cron
+

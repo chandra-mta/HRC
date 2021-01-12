@@ -1,0 +1,7 @@
+'/data/aschrc6/wilton/isobe/Project8/Vega/'                          :main_dir
+'/data/aschrc6/wilton/isobe/Project8/Vega/Scripts/'                  :bin_dir
+'/data/aschrc6/wilton/isobe/Project8/Vega/Scripts/house_keeping/'    :house_keeping
+'/data/aschrc6/wilton/isobe/Project8/Vega/Data/'                     :data_dir
+'/data/aschrc6/wilton/isobe/Project8/Vega/Exc/'                      :exc_dir
+'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/Vega/'        :html_dir
+'/data/mta/Script/Python3.6/MTA/'                                    :mta_dir

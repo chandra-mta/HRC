@@ -1,0 +1,7 @@
+'/data/aschrc6/wilton/isobe/Project10/'                         : main_dir
+'/data/aschrc6/wilton/isobe/Project10/Scripts/'                 : bin_dir
+'/data/aschrc6/wilton/isobe/Project10/Scripts/house_keeping/'   : house_keeping
+'/data/aschrc6/wilton/isobe/Project10/Data/'                    : data_dir
+'/data/aschrc6/wilton/isobe/Project10/Exc/'                     : exc_dir
+'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/SSC_trend/'            : html_dir
+'/data/mta/Script/Python3.6/MTA/'                               : mta_dir

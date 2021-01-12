@@ -1,0 +1,8 @@
+0000000000000000000000000000000000000000 7ae369d016a4288e03b79b623ca3f197b7378caa bspitzbart <bspitzbart@cfa.harvard.edu> 1565802561 -0400	commit (initial): HRC previous versions
+7ae369d016a4288e03b79b623ca3f197b7378caa 8eaf82c681d62436a5abda47e646250a9358f0b5 bspitzbart <bspitzbart@cfa.harvard.edu> 1565804659 -0400	commit: python3.6 update
+8eaf82c681d62436a5abda47e646250a9358f0b5 c03d99de61b730c732e42f5efdc2bd52982e8394 bspitzbart <bspitzbart@cfa.harvard.edu> 1565804695 -0400	commit: python3.6 update
+c03d99de61b730c732e42f5efdc2bd52982e8394 2928b7f520396facbd33df6619ba39f4dcc70bf6 bspitzbart <bspitzbart@cfa.harvard.edu> 1565886561 -0400	commit: HRC SSC Error Trending added
+2928b7f520396facbd33df6619ba39f4dcc70bf6 080b994c47ad230eda56c2c356b150d8e88290a8 bspitzbart <bspitzbart@cfa.harvard.edu> 1566311928 -0400	commit: HRC mismatch: check_cmd_diff.py --- added table clean up
+080b994c47ad230eda56c2c356b150d8e88290a8 c760b3e5d5e5dbbb52d45b0fb81384dae00f5e00 bspitzbart <bspitzbart@cfa.harvard.edu> 1567164901 -0400	commit: check_cmd_diff.py: bug fixed
+c760b3e5d5e5dbbb52d45b0fb81384dae00f5e00 2ec4131af13ac3474cf25b7acf5d7295411d1edd bspitzbart <bspitzbart@cfa.harvard.edu> 1568031880 -0400	commit: HRC_arlac_samp: run_arlac_sumamp.py: position clarification added
+2ec4131af13ac3474cf25b7acf5d7295411d1edd f7f6fc15dcec785555e699c942ca1fbecf44c64c bspitzbart <bspitzbart@cfa.harvard.edu> 1572953508 -0500	commit: HRC_arlac_gain hrc_gain_trend_plot.py html link fixed

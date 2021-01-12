@@ -1,0 +1,96 @@
+
+-------------------------------------------------
+Comparing Backstop Command List and HRC HK values
+-------------------------------------------------
+
+This set of scripts extract command sequence from backstop log (planned commands),
+and actual conditions from HRC HK data, and compare them to see whether there are
+any discrepancies. If there are, one of the script sends out email warning to 
+notify the discrepancies.
+
+Scripts
++++++++
+hrc_backstop_wrap_script
+hrc_backstop_main_script
+    --- control scripts to set the environment
+
+extract_backstop_comm.py
+--------------------------
+this script reads backstop command list and  extracts commands only related to HRC.
+only the most recent file is read, and upate the data posted after starting data of
+the file.
+
+input: /data/mpcrit1/mplogs/*../ofls/*.backstop
+
+output: <data_dir>/hrc_backstop_extracted2007
+
+check_cmd_diff.py
+-------------------
+this script compares backstop commands and hrc hk record to find mismatched cases 
+
+input:
+	$start = $ARGV[0];	
+	$stop  = $ARGV[1];
+	if these are not given, the period is set between 2 days ago and today 23:00:00.
+    <data_dir>/backstop_extract2007
+    hrc hk0 fits files from archeive
+
+output:
+    <exc_dir>/cmd_diff_cont     #--- a file contains mismatched case information
+
+Note: commands are recognized as "match" if the hrc hk has the same patern during the command
+      issued time +/- 180 sec (+/- 3min). Even if there is no mached patern in that time
+      period, if the next backstop command changes which is issued less than 30 sec from the original
+      command has a match in hrc hk, then the original commands are ignored, and the latter
+      command is recorded as "match" found.
+
+comp_voltage.py
+---------------
+this script compares commanded HV setting and actual reading HV output 
+
+input:
+    hrc hk0 fits files from archeive (extracted by check_cmd_diff.py)
+
+output:
+    <exc_dir>/voltage_cont      #--- a file contains mismatched case information
+
+check_dither_diff.py
+----------------------
+this script compares backstop dithercommands and hrc hk record to find mismatched 
+cases
+
+input:
+	$start = $ARGV[0];	#---- format: 2007:210:00:00:00
+	$stop  = $ARGV[1];
+	if these are not given, the period is set between 2 days ago and today 23:00:00.
+    <data_dir>/backstop_extract2007
+    pcad pcad8eng data from archieve
+
+output:
+    <exc_dir>/dither_cont       #--- a file contains mismatched case information
+
+Note: since enable command can be issued multiple times without any effect, this script
+      check dither enable command only when dither disable command issued. 
+      because of that, email warning is sent out only when dither disable has no match.
+
+send_email_out.py
+-----------------
+this script sends out email if there are mismatch cases
+input:
+    <exc_dir>/cmd_diff_cont
+    <exc_dir>/voltage_cont
+    <exc_dir>/dither_cont
+ouput:
+    email sent out
+    <record_dir>/email_<mm>_<dd>_<yyy>
+
+Environment
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+
+Cronjob:
+++++++++
+as isobe on ascda3
+16 5 * * *   cd /data/aschrc6/wilton/isobe/Project2/Exc; /data/aschrc6/wilton/isobe/Project2/Script3.6/hrc_backstop_wrap_script >> /home/isobe/Logs/hrc_backstop_extract_log.cron 2>&1
+
+

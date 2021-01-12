@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title> 
+    HRC Energy: Gain Fitting Results 
+</title>
+<script type="text/javascript">
+
+
+function WindowOpener(file) {
+    msgWindow = open("","displayname","toolbar=no,directories=no,menubar=no,location=no,scrollbars=no,status=no,width=720,height=400,resize=no");
+    msgWindow.document.clear();
+    msgWindow.document.write("<!DOCTYPE html><html><head><title>HRC Energy Profile</title></head>");
+    msgWindow.document.write("<body bgcolor='white'>");
+    msgWindow.document.write("<iframe src='http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/Trend_plots/Indivisual_Plots/"+file+"' border=0 width=720 height=400></iframe>")
+    msgWindow.document.write("</body></html>")
+    msgWindow.document.close();
+    msgWindow.focus();
+}
+</script>
+
+</head>
+
+<body style="background-color:#F5F5DC;width:95%;margin-left:10px; margin-right;10px">
+
+<h3>HRC Gain Fitting Results</h3>
+
+<div style="text-align:right;padding-bottom:20px;">
+    <a href="http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/arlac_energy_trend.html"><b>Back to Main Page</b></a>
+</div>
+
+<table border=1 cellpadding=2>
+<tr>
+<th>ObsId</th>
+<th>Date</th>
+<th>Detector</th>
+<th>RA Pointing<br /> (deg)</th>
+<th>DEC Pointing<br /> (deg)</th>
+<th>RA Offset <br /> (arcmin)</th>
+<th>DEC Offset <br /> (arcmin)</th>
+<th>Radial Offset <br /> (arcmin)</th>
+<th>Median <br />(pha)</th>
+<th>Center <br />(pha)</th>
+<th>Amp</th>
+<th>FWHM <br />(pha)</th>
+</tr>
+

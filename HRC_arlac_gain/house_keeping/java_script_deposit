@@ -1,0 +1,15 @@
+<script type="text/javascript">
+
+
+    function WindowOpener(file) {
+        msgWindow = open("","displayname","toolbar=no,directories=no,menubar=no,location=no,scrollbars=no,status=no,width=720,height=400,resize=no");
+        msgWindow.document.clear();
+        msgWindow.document.write("<!DOCTYPE html><html><head><title>HRC Energy Profile</title></head>");
+        msgWindow.document.write("<body bgcolor='white'>");
+        msgWindow.document.write("<iframe src='http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/Trend_plots/Indivisual_Plots/"+file+"' border=0 width=720 height=400></iframe>")
+        msgWindow.document.write("</body></html>")
+        msgWindow.document.close();
+        msgWindow.focus();
+    }
+</script>
+

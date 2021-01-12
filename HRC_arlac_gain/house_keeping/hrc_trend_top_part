@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> HRC Energy Trending</title>
+    <style>
+        p{
+            text-align:left;
+            margin-right:0px;
+            padding-left:20px;
+            padding-right:30px;
+        }
+        table{
+            margin-left:auto; 
+            margin-right:auto;
+        }
+    </style>
+
+    <script language="JavaScript">
+    function MyWindowOpener(imgname) {
+        msgWindow=open("","displayname","toolbar=no,directories=no,menubar=no,location=no,scrollbars=yes,status=no,width=900,height=700,resize=yes");
+        msgWindow.document.close();
+        msgWindow.document.write("<html><head><title>Gain plot:"+imgname+"</title></head>");
+        msgWindow.document.write("<body bgcolor='white'>");
+         msgWindow.document.write("<iframe scr ='http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/Trend_plots/Dist_Html/" + file + "' border=0 width=800 height=600></body></html>");
+        msgWindow.focus();
+    }
+    </script>
+</head>
+<body style='background-color:#F5F5DC;width:95%;margin-left:10px; margin-right;10px'>
+
+<h2>HRC PHA Evolution (QE and Gain Variation with Time)</h2>
+
+<p style="text-align:left;">
+Following <em>Posson-Brown</em> and <em>Donnelly's</em> memo (
+<a href="./Trend_plots/hrc_gain.pdf" target='blank'>"Evolution of PHA Response in the HRC (pdf)"</a>),
+we computed evolution of HRC PHA response using following steps:
+</p>
+
+<ul style="padding-left:70px;padding-right:120px;font-size:95%;text-align:justify;">
+    <li> 
+        Find calibration AR Lac observations with HRC. Event 2 data are used.
+    </li>
+    <li> 
+        Compute a radial distance by taking difference between a pointing direction and AR Lac position
+        (RA  = 332.179975 degree, DEC = 45.7422544 degree).
+    </li>
+    <li> 
+        Find AR Lac by scanning the entire HRC.
+    </li>
+    <li> 
+        Extract an area around AR Lac with the radius of 60 pixels if the distance less than 10 arcmin,
+        200 pixels if the distance more than 10 arcmin.
+    </li>
+    <li> 
+        A PHA distribution was obtained from this area, and fit a Vogit profile to find a peak position
+        and a FWHM of the Voigt profile. A median is also computed.
+    </li>
+    <li>
+        Fit lines between year 2000 and 2012, and 2012 to current year. We dropped year 1999 data
+        as they skew the distribution. 
+    </li>
+</ul>
+
+<p style="text-align:left;">
+The plots below show the time trend plots of  PHA median, PHA Voigt peak position, and PHA FWHM.
+The data points are separated into the radial distance from the aiming point less than 
+5 arcmins (blue square), between 5 arcmins and 10 arcmins (red diamond), 
+between 10 arcmins and 15 arcmins (green circle), and more than 15 arcmins (blue triangle).
+Time positions are slightly shifted to right and left so that data points are not 
+overlapped on the plot.
+</p>
+
+<p style="text-align:left;">
+The tables following the time trend plots list links to the plot of radial distributions 
+of observations of each year.  Please select a year. It will open up a plot.
+</p>
+
+<p style="text-align:left;">
+<b>Note:</b> The following plots are interactive plots. If you hover the mouse on a data point, 
+it will display the information about that data point. Because of the large size of the data, 
+the page may take a while to load. 
+</p>

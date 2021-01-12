@@ -1,0 +1,7 @@
+
+setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+
+cd /data/aschrc6/wilton/isobe/Project8/ArLac/Exc/
+
+/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts/compute_arlac_count.py
+
