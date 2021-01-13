@@ -6,7 +6,7 @@
 #                                                                                           #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                       #
 #                                                                                           #
-#           last update: Aug 01, 2019                                                       #
+#           last update: Jan 13, 2021                                                       #
 #                                                                                           #
 #############################################################################################
 
@@ -163,12 +163,21 @@ def run_get_hrc_hk0(tstart, year, mon, day):
 #
 #--- extract  hrc4eng data with arc5gl
 #
-    run_arc5gl(tstart, tstop)
+    out = run_arc5gl(tstart, tstop)
+    if out == False:
+        return
 #
 #--- merge all hrc4eng data into one fits file
 #
     cmd  = 'ls hrcf*_hk0.fits.gz >dat.lis'
     os.system(cmd)
+#
+#--- if nothing extracted, just finish
+#
+    ftst = mcf.read_data_file('./dat.lis')
+    if len(ftst) == 0:
+        return 'NA'
+
 
     cmd1 = "/usr/bin/env PERL5LIB="
     cmd2 = ' dmmerge "@dat.lis[time=' + str(tstart) 
@@ -235,15 +244,23 @@ def run_arc5gl(tstart, tstop):
         fo.write(line)
 
     try:
-        cmd = ' /proj/sot/ska/bin/arc5gl -user isobe -script ' + zspace 
+        cmd = ' /proj/sot/ska/bin/arc5gl -user isobe -script ' + zspace  +' > ./ztemp'
         os.system(cmd)
     except:
         cmd1 = "/usr/bin/env PERL5LIB="
-        cmd2 = ' /proj/axaf/simul/bin/arc5gl -user isobe -script ' + zspace
+        cmd2 = ' /proj/axaf/simul/bin/arc5gl -user isobe -script ' + zspace +' > ./ztemp'
         cmd  = cmd1 + cmd2
         bash(cmd,  env=ascdsenv)
 
     mcf.rm_files(zspace)
+
+    tout = mcf.read_data_file('./ztemp', remove=1)
+    mc   = re.search('Retrieved no files', tout[0])
+    if mc is not None:
+        return False
+    else:
+        out = tou[1:]
+        return out
 
 #-----------------------------------------------------------------------------
 
