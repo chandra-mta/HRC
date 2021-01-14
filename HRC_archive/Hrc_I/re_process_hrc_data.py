@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Jan 12, 2021                                                           #
+#           Last Update: Jan 14, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -546,7 +546,7 @@ def find_hrc_calib_obsid(inst):
 #
 #--- create a list of already processed data
 #
-    cmd = 'ls -d /data/hrc/' + str(inst) + '/6*  > '+ zsapce
+    cmd = 'ls -d /data/hrc/' + str(inst) + '/6*  > '+ zspace
     with open(zspace, 'r') as f:
         ftest = f.read()
     wrd = str(inst) + '/61'
