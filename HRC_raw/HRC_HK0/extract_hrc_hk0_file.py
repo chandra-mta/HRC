@@ -6,7 +6,7 @@
 #                                                                                           #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                       #
 #                                                                                           #
-#           last update: Jan 13, 2021                                                       #
+#           last update: Jan 15, 2021                                                       #
 #                                                                                           #
 #############################################################################################
 
@@ -259,7 +259,7 @@ def run_arc5gl(tstart, tstop):
     if mc is not None:
         return False
     else:
-        out = tou[1:]
+        out = tout[1:]
         return out
 
 #-----------------------------------------------------------------------------
