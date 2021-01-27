@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                           #
 #                                                                               #
-#           Last Update: Sep 05, 2019                                           #
+#           Last Update: Jan 21, 2021                                           #
 #                                                                               #
 #################################################################################
 
@@ -15,11 +15,7 @@ import os
 import string
 import re
 import math
-import unittest
 import time
-import numpy
-import astropy.io.fits  as pyfits
-from datetime import datetime
 import matplotlib as mpl
 
 if __name__ == '__main__':
@@ -108,7 +104,6 @@ def create_html_and_plot():
             ofile  = html_dir + 'Sub_htmls/hrc_' + p_list[k] + '.html'
             with open(ofile, 'w') as fo:
                 fo.write(line) 
-
 #
 #--- change the updated date
 #
@@ -137,7 +132,6 @@ def plot_data(data, outname, pos):
             pos     --- indicator of position of aiming
     output  outname --- png plot of the data
     """
-
     date = []
     cnt  = []
     err  = []
@@ -146,8 +140,7 @@ def plot_data(data, outname, pos):
         if not mcf.is_neumeric(atemp[-1]):
             continue
         try:
-            stime = mcf.convert_date_format(atemp[2], ifmt='%Y-%m-%dT%H:%M:%S', ofmt='chandra')
-            ytime = mcf.chandratime_to_fraq_year(stime)
+            ytime = hcf.convert_time_to_fyear(atemp[2], tformat='%Y-%m-%dT%H:%M:%S')
     
             exp   = float(atemp[3])
             val   = float(atemp[4])
@@ -240,7 +233,6 @@ def line_fit(x, y, e):
             siga    --- error on the intercept
             sigb    --- error on the slope
     """
-
     suma  = 0
     sumx  = 0
     sumy  = 0
@@ -290,7 +282,6 @@ def create_html_table(data, title):
             title   --- a title of the table
     output: line    --- a html table  page
     """
-
     line = '<!DOCTYPE html>\n'
     line = line + '<html>\n<head>\n'
     line = line + '<title>Monitoring the UV/Ion Shield Health: Ar Lac Data Table</title>\n'
@@ -342,7 +333,6 @@ def sorted_by_time(data):
                         of <yyyy>-<mm>-<dd>T<hh>:<mm>:<ss>
     ouput:  out     --- time sorted data
     """
-
     tlist = []
     tdict = {}
     for ent in data:
@@ -377,7 +367,7 @@ def send_notification():
         fo.write(text)
 
     cmd = 'cat ' + zspace + ' |mailx -s "Subject: New AR Lac Observation" vkashyap@cfa.harvard.edu'
-    os.system(cmd)
+    ####os.system(cmd)
     cmd = 'cat ' + zspace + ' |mailx -s "Subject: New AR Lac Observation" ' + admin
     os.system(cmd)
 

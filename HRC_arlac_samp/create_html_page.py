@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #       author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                               #
-#       last update: Jul 31, 2019                                               #
+#       last update: Jan 26, 2021                                               #
 #                                                                               #
 #################################################################################
 
@@ -102,7 +102,7 @@ def create_html_page(chk=''):
     text = "<table border=1 cellpadding=2>\n"
     text = text + "<tr>\n"
     text = text + "<th>Y/Z Offsets<br />(arcmin)</th><th colspan=2>Scaled Sum Amp"
-    text + "</th><th colspan=2>PI</th>\n"
+    text = text + "</th><th colspan=2>PI</th>\n"
     text = text + "</tr>\n"
     text = text + "<tr>\n"
     text = text + "<tr>\n"
@@ -147,9 +147,9 @@ def create_html_page(chk=''):
 #
     html = html.replace('#HRCITEXT#', hrci_text) 
     html = html.replace('#HRCSTEXT#', hrcs_text) 
-    html = html.replace('#TABLE2#', text2) 
-    html = html.replace('#TABLE#',  text) 
-    html = html.replace('#UPDATE#', update)
+    html = html.replace('#TABLE2#',   text2) 
+    html = html.replace('#TABLE#',    text) 
+    html = html.replace('#UPDATE#',   update)
 
     outname = web_dir + 'arlac_trends.html'
     with open(outname, 'w') as fo:
@@ -176,7 +176,6 @@ def create_table_cell(kpos, s_dict, s_dict2,  flist, m, kalt=''):
                         if that is the case, use this
     output: text    --- a row fo the table
     """
-
 #
 #--- this tests whether the value exists before doing anything else
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe(tisobe@cfa.harvard.edu)                            #
 #                                                                               #
-#           Last Update:    Jun 17, 2019                                        #
+#           Last Update:    Jan 21, 2021                                        #
 #                                                                               #
 #################################################################################
 
@@ -17,9 +17,9 @@ import string
 import math
 import numpy
 import scipy
+from scipy.optimize import curve_fit
 import time
 import warnings
-
 import matplotlib as mpl
 
 if __name__ == '__main__':
@@ -51,7 +51,6 @@ sys.path.append(mta_dir)
 #--- import several functions
 #
 import mta_common_functions as mcf  #---- contains other functions commonly used in MTA scripts
-from kapteyn import kmpfit
 #
 #--- temp writing file name
 #
@@ -171,16 +170,6 @@ def gfunction(x, a, b, h):
     return g
 
 #---------------------------------------------------------------------------------------
-#---------------------------------------------------------------------------------------
-#---------------------------------------------------------------------------------------
-
-def residualsG(p, data):
-   # Return weighted residuals of Voigt
-   x, y, err = data
-   a, b, h   = p
-   return (y- gfunction(x, a, b, h)) / err
-
-#---------------------------------------------------------------------------------------
 #-- gamma_fit: fitting gamma profile to the data                                     ---
 #---------------------------------------------------------------------------------------
 
@@ -200,20 +189,16 @@ def gamma_fit(x, y, a0, b0, m0):
 #
 #--- initial guess
 #
-    
     p0 = [a0, b0, m0]
-
 #
 #--- fit the model
 #
     try:
-        fitter = kmpfit.Fitter(residuals=residualsG, data=(x,y,err))
-        #fitter.parinfo = [{}, {}, {'fixed':True}]  # Take zero level fixed in fit
-        fitter.fit(params0=p0)
+        popt, pcov = curve_fit(gfunction, x, y, p0=p0)
+        [a, b, h]  = list(popt)
     
-        a, b, h = fitter.params
     except:
-        a, b, h = p0
+        [a, b, h] = p0
 
     return [a, b, h]
 

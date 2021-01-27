@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                           #
 #                                                                               #
-#           Last Update: Jul 18, 2019                                           #
+#           Last Update: Jan 21, 2021                                           #
 #                                                                               #
 #################################################################################
 
@@ -20,13 +20,6 @@ import numpy
 import astropy.io.fits  as pyfits
 import time
 import random
-#
-#--- from ska
-#
-from Ska.Shell import getenv, bash
-ascdsenv = getenv('source /home/ascds/.ascrc -r release; \
-                   source /home/mta/bin/reset_param ', shell='tcsh')
-ciaoenv  = getenv('source /soft/ciao/bin/ciao.sh')
 #
 #--- reading directory list
 #
@@ -195,12 +188,9 @@ def filter_by_status(fits):
     output: fits    --- status filtered fits file
     """
     cmd  = ' dmcopy "' + fits + '[status=0000xxxx000xxxxx]" outfile=zxc.fits clobber=yes'
-#
-#--- dmcopy may not work with ascds; if so, use ciao
-#
-    hcf.run_ascds(cmd)
+    os.system(cmd)
     if not os.path.isfile('zxc.fits'):
-        hcf.run_ciao(cmd)
+        print("I AM HERE ERROR: " + cmd + " did not work")
 
     cmd  = 'mv zxc.fits ' + fits
     os.system(cmd)
@@ -214,5 +204,12 @@ if __name__ == '__main__':
         fits.strip()
 
         filter_evt_file(fits)
+    elif len(sys.argv) == 3:
+        fits = sys.argv[1]
+        fits.strip()
+        obsid = sys.argv[2].strip()
+
+        filter_evt_file(fits, obsid=obsid)
+
     else:
         print("Need fits file name!")

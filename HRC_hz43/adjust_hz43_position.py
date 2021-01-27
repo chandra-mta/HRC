@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Jul 17, 2019                                                           #
+#           Last Update: Jan 21, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -17,7 +17,6 @@ import re
 import math
 import unittest
 import time
-import Chandra.Time
 import random
 import numpy
 import astropy.io.fits  as pyfits
@@ -65,8 +64,10 @@ def adjust_hz43_position(date):
 #
 #--- evt1 DATE-OBS to fractional year
 #
-    out   = mcf.convert_date_format(date, ifmt='%Y-%m-%dT%H:%M:%S', ofmt='chandra')
-    cyear = mcf.chandratime_to_fraq_year(out)
+    if mcf.is_neumeric(date):
+        cyear = float(date)
+    else:
+        cyear = hcf.convert_time_to_fyear(date)
 #
 #--- set several initial values
 #

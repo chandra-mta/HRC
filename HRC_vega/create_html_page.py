@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #########################################################################################
 #                                                                                       #
@@ -6,7 +6,7 @@
 #                                                                                       #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                       #
-#           Last Update: Sep 05, 2019                                                   #
+#           Last Update: Jan 27, 2021                                                   #
 #                                                                                       #
 #########################################################################################
 
@@ -79,8 +79,8 @@ def create_html_and_plot():
     except:
         pass
 
-    if chk == 0:
-        exit(1)
+#    if chk == 0:
+#        exit(1)
 #
 #--- read html page template
 #
@@ -162,14 +162,18 @@ def plot_data(data, outname, pos):
     xmax = int(max(date)) + 1
     ymin = 0.0
     if pos == 'i': 
-        ymin = -0.001
+        ymin = -0.004
         ymax =  0.004
     elif pos == 's_0':
-        ymax = 0.25
+        #ymax = 0.25
+        ymin = -0.010
+        ymax =  0.010
     elif pos == 's_10':
-        ymax = 300
+        #ymax = 300
+        ymax = 100
     elif pos == 's_m10':
-        ymax = 200
+        #ymax = 200
+        ymax = 100
     else:
         ymax = 600
 #
@@ -203,8 +207,12 @@ def plot_data(data, outname, pos):
     ypos  = ymax - 0.1  * ydiff
     ac    = '%1.2f' % (round(a,  2))
     if abs(b) < 0.01:
-        bc    = '%1.4f' % (round(abs(b),  4))
-        ec    = '%1.4f' % (round(sb, 4))
+        if b < 0.0001:
+            bc    = '%1.6f' % (round(abs(b),  6))
+            ec    = '%1.6f' % (round(sb, 6))
+        else:
+            bc    = '%1.4f' % (round(abs(b),  4))
+            ec    = '%1.4f' % (round(sb, 4))
     else:
         bc    = '%1.2f' % (round(abs(b),  2))
         ec    = '%1.2f' % (round(sb, 2))

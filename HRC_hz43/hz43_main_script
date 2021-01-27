@@ -1,13 +1,19 @@
 cd /data/aschrc6/wilton/isobe/Project8/HZ43/Exc
 
-setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+source /home/ascds/.ascrc -r release 
+source /home/mta/bin/reset_param
+
+setenv PYTHONPATH "/data/mta/Script/Python3.9/lib/python3.9/site-packages/"
 
 /data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/analyze_hz43_data.py
-
+echo "done analyzing"
 /data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_hz43_trend_plots.py
+echo "done trend plot"
 /data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_count_rate_plots.py
+echo "done count rate plot"
 /data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_profile_plot.py
-
+echo "done profile plot"
 /data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/create_html_page.py
-
+echo "done html creation"
 /data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/sendout_email.py
+echo "done all"

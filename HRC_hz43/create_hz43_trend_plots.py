@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                           #
 #                                                                               #
-#           last update: Jul 17, 2019                                           #
+#           last update: Jan 21, 2021                                           #
 #                                                                               #
 #################################################################################
 
@@ -52,7 +52,6 @@ sys.path.append(mta_dir)
 #--- converTimeFormat contains MTA time conversion routines
 #
 import mta_common_functions as mcf
-import find_moving_average  as fmv
 
 mday         = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 year_div     = 2012
@@ -77,7 +76,7 @@ def create_plots():
     try:
         c_file = house_keeping + 'chk_save'
         with open(c_file, 'r') as f:
-            chk_save = f.read().strip()
+            chk_save = int(f.read())
     except:
         pass
 
@@ -237,8 +236,15 @@ def read_file(infile):
 
     for ent in data:
         atemp = re.split('\s+', ent)
-        ctime = mcf.convert_date_format(atemp[2], ifmt='%Y-%m-%dT%H:%M:%S', ofmt='chandra')
-        ytime = mcf.chandratime_to_fraq_year(ctime)
+        out   = time.strftime('%Y:%j:%H:%M:%S', time.strptime(atemp[2], '%Y-%m-%dT%H:%M:%S'))
+        btemp = re.split(':', out)
+        year  = float(btemp[0])
+        if mcf.is_leapyear(year): 
+            base = 366.0
+        else:
+            base = 365.0
+        ytime = year + (float(btemp[1]) + float(btemp[2])/24.0  + float(btemp[3])/1440.0 + float(btemp[4])/86400.) / base
+
         if ytime < 2000:
             continue
 

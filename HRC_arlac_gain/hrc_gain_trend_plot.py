@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #########################################################################################
 #                                                                                       #
@@ -6,7 +6,7 @@
 #                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                       #
-#               last update: Nov 05, 2019                                               #
+#               last update: Jan 26, 2021                                               #
 #                                                                                       #
 #########################################################################################
 
@@ -17,6 +17,7 @@ import string
 import random
 import operator
 import time
+import math
 import numpy
 import matplotlib as mpl
 
@@ -48,14 +49,12 @@ for ent in data:
 #
 sys.path.append(bin_dir)
 sys.path.append(mta_dir)
+sys.path.append(hrc_common)
 #
 #--- converTimeFormat contains MTA time conversion routines
 #
 import mta_common_functions as mcf
-#
-#--- least sq fitting routine (see https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html)
-#
-from kapteyn import kmpfit
+import hrc_common_functions as hcf
 #
 #--- temp writing file name
 #
@@ -73,6 +72,7 @@ entLabels   = ["PHA Median", "PHA Voigt Peak Position", "PHA FWHM"]
 colorList   = ('blue', 'green', 'red', 'aqua', 'lime', 'fuchsia', 'maroon', 'black', 'yellow', 'olive')
 #
 #--- html addresses
+#
 thtml      = "https://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/"
 html_trend = 'Trend_plots/'
 
@@ -132,7 +132,7 @@ def hrc_gain_trend_plot():
 #
 #--- separate the data to hrc i and hrc s
 #
-        fyear = mcf.chandratime_to_fraq_year(float(atemp[2]))
+        fyear = hcf.convert_chandra_time_to_fyear(float(atemp[2]))
 
         if atemp[3] == 'HRC-I':
             obsid_i.append(atemp[0])
@@ -352,9 +352,9 @@ def plotPanel(xmin, xmax, ymin, ymax, xdata, ydata,  dist,  xname, yname,\
         yv1      = []
         shifted2 = []
         yv2      = []
-        b_point  = 2012                     #--- separate the data before and after 2012.1.1
+        b_point  = 2012.0                     #--- separate the data before and after 2012.1.1
         for n in range(0, len(xv[m])):
-            if xv[m][n] < b_point and xv[m][n] >= 2000:
+            if xv[m][n] < b_point and xv[m][n] >= 1999:
 #
 #--- to get the better fit, shift the data to start from 1999 rather than year 0
 #
@@ -362,33 +362,26 @@ def plotPanel(xmin, xmax, ymin, ymax, xdata, ydata,  dist,  xname, yname,\
                 yv1.append(yv[m][n])
 
             elif xv[m][n] >= b_point:
-                shifted2.append(xv[m][n] - 1999)
+                shifted2.append(xv[m][n] - b_point)
                 yv2.append(yv[m][n])
 #
 #--- fitting the first half
 #
-        paramsinitial = [80, 0.3]
-        ferr   = [0] * len(shifted1)
-        fitobj = fit_line(paramsinitial, shifted1, yv1, ferr, 'linear')
-        (a, b) = fitobj.params
-        (ae,be)= fitobj.xerror
+        (a, b, be) = fit_line(shifted1, yv1)
         fit1.append([a, b, be])
-        start  = a + b * ((xmin-1999) - 0.5)
-        stop   = a + b * 14
-        ax.plot([xmin, b_point], [start, stop],  color=colorList[m-1],\
-                    marker=marker_list[m-1], lw=2, label=label_list[m-1])
+        start  = a + b * (xmin-1999)
+        stop   = a + b * 13
+        ax.plot([xmin, b_point], [start, stop],  color=colorList[m],\
+                    marker=marker_list[m], lw=2, label=label_list[m])
 #
 #--- fitting the latter half
 #
-        ferr   = [0] * len(shifted2)
-        fitobj = fit_line(paramsinitial, shifted2, yv2, ferr, 'linear')
-        (a, b) = fitobj.params
-        (ae,be)= fitobj.xerror
+        (a, b, be) = fit_line(shifted2, yv2)
         fit2.append([a, b, be])
-        start  = a + b * 14
-        stop   = a + b * ((xmax-1999) - 0.5)
-        ax.plot([b_point, xmax], [start, stop],  color=colorList[m-1],\
-                    marker=marker_list[m-1], lw=2)
+        start  = a + b * 0
+        stop   = a + b * (xmax- b_point)
+        ax.plot([b_point, xmax], [start, stop],  color=colorList[m],\
+                    marker=marker_list[m], lw=2)
 #
 #---- set plotting frames
 #
@@ -524,11 +517,8 @@ def plotPanel2(xmin, xmax, ymin, ymax, xdata, ydata, xname, yname, elabel, plabe
 
     paramsinitial = [100, 1.0]
     if len(xdata) > 2:
-        ferr   = [0] * len(xdata)
         try:
-            fitobj = fit_line(paramsinitial, xdata, ydata, ferr, 'linear')
-            (a, b) = fitobj.params
-            (ae,be)= fitobj.xerror
+            (a, b, be) = fit_line(xdata, ydata)
             fit1.append([a, b, be])
             start  = a + b * xmin
             stop   = a + b * xmax
@@ -644,11 +634,11 @@ def adjust_obsid_digit(obsid):
     if cval < 10:
         cobsid = '0000' + str(obsid)
     elif cval < 100:
-        cobsid = '000' + str(obsid)
+        cobsid = '000'  + str(obsid)
     elif cval < 1000:
-        cobsid = '00' + str(obsid)
+        cobsid = '00'   + str(obsid)
     elif cval < 10000:
-        cobsid = '0' + str(obsid)
+        cobsid = '0'    + str(obsid)
     else:
         cobsid = str(obsid)
 
@@ -731,8 +721,7 @@ def update_html_page(fig_hi, fig_hs,fit1_hi, fit2_hi, fit1_hs, fit2_hs, stime):
     diff   = lyear - 1999
     for  k in range(0, diff):
         year = 1999 + k
-        #out = out + '<td><a href="https://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/'
-        out = out + './'
+        out = out + '<td><a href="./'
         out = out + html_trend + 'Dist_Html/hrc_i_radial_dist_year'
         out = out + str(year) + '.html">' + str(year) + '</a></td>\n'
         if (k+1) % 14 == 0:
@@ -789,9 +778,8 @@ def update_html_page(fig_hi, fig_hs,fit1_hi, fit2_hi, fit1_hs, fit2_hs, stime):
     diff   = lyear - 1999
     for  k in range(0, diff):
         year = 1999 + k
-        #out = out + '<td><a href="https://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/'
-        out = out + './'
-        out = out + html_trend + 'Dist_Html/hrc_i_radial_dist_year'
+        out = out + '<td><a href="./'
+        out = out + html_trend + 'Dist_Html/hrc_s_radial_dist_year'
         out = out + str(year) + '.html">' + str(year) + '</a></td>\n'
         if (k+1) % 14 == 0:
             out = out + '</tr><tr>\n'
@@ -856,7 +844,11 @@ def create_radial_html_page(time_e, obsid_e, dist_e, med_e, center_e, width_e, e
         obsid  = [] 
         pend = pyear + 1
         for j in range(0, len(time_e)):
-            if  (time_e[j] >= pyear) and (time_e[j] < pend):
+            if  (time_e[j] <= pyear):
+                continue
+            elif (time_e[j] > pend):
+                break 
+            else:
                 obsid.append(obsid_e[j])
                 dist.append(dist_e[j])
                 med.append(med_e[j])
@@ -890,20 +882,22 @@ def create_radial_html_page(time_e, obsid_e, dist_e, med_e, center_e, width_e, e
 #--- add links to move forward, backward, and back to the top page
 #
         if pyear > 1999 and pyear < stop:
-            out = out + '<a href="' + html_trend + 'Dist_Html/hrc_' + inst 
+            out = out + '<a href="' + './hrc_' + inst 
             out = out + '_radial_dist_year' + str(pyear-1) + '.html">'
             out = out + '<b>&lt;&lt;Previous Year</b></a>'
-            #out = out + '<span style="color:#F5F5DC">span</span>'
             out = out + ' &diams; '
-            out = out + '<a href="' + html_trend + 'Dist_Html/hrc_' + inst 
+            
+            out = out + '<a href="' + './hrc_' + inst 
             out = out + '_radial_dist_year' + str(pyear+1) + '.html">'
             out = out + '<b>Next Year&gt;&gt;</b></a>'
+
         elif pyear == 1999:
-            out = out + '<a href="' + html_trend + 'Dist_Html/hrc_' + inst 
+            out = out + '<a href="'  + './hrc_' + inst 
             out = out + '_radial_dist_year' + str(pyear+1) + '.html">'
             out = out + '<b>Next Year&gt;&gt;</b></a>'
+
         elif pyear == stop:
-            out = out + '<a href="' + html_trend + 'Dist_Html/hrc_' + inst 
+            out = out + '<a href="' + './hrc_' + inst 
             out = out + '_radial_dist_year' + str(pyear-1) + '.html">'
             out = out + '<b>&lt;&lt;Previous Year</b></a>'
 
@@ -1017,118 +1011,68 @@ def sort_by_col(data,colnum):
     return out
 
 #-----------------------------------------------------------------------------------------
-#-- fit_line: kmpfit calling function to fit the lines on data                          --
+#-- fit_line: remove the extreme data points and fit a line                             --
 #-----------------------------------------------------------------------------------------
 
-def fit_line(paramsinit, x, y, err, ptype):
+def fit_line(x, y):
     """
-    kmpfit calling function to fit the lines on data
-    input: paramsinit: initial guess for the parameters
-    x, y: data
-    ptype: linear or exp:
-    output: two parameters (a, b) are returned
+    remove the extreme data points and fit a line
+    input:  x   --- a list of independent values
+            y   --- a list of dependent values
+    output: a   --- intercept
+            b   --- slope
     """
-    sx = []
-    sy = []
-    se = []
+#
+#--- remove extreme values
+#
+    xx = []
+    yy = []
     avg  = mean(y)
     stdp = std(y)
     bot  = avg - 3.0 * stdp
     top  = avg + 3.0 * stdp
-    i = 0
-    for val in y:
+
+    for i in range(0, len(y)):
+        val = y[i]
         if (val >= bot) and (val <= top):
-            sx.append(x[i])
-            sy.append(y[i])
-            se.append(err[i])
-        i += 1
+            xx.append(x[i])
+            yy.append(y[i])
 #
-#--- make sure that the arrays are numpyed
+#--- fit a linear line
 #
-    d = numpy.array(sx)
-    v = numpy.array(sy)
-    e = numpy.array(se)
+    sx  = 0.0
+    sy  = 0.0
+    sxy = 0.0
+    sxx = 0.0
+    tot = len(xx)
 
-    if ptype == 'linear':
+    if tot <= 2:
+        return [0, 0, 0]
+
+    for j in range(1, tot):
+        sx  += xx[j]
+        sy  += yy[j]
+        sxy += xx[j] * yy[j]
+        sxx += xx[j] * xx[j]
+
+    delta = tot * sxx - sx * sx
+
+    a     = (sxx * sy  - sx * sxy) / delta
+    b     = (tot * sxy - sx * sy)  / delta
 #
-#--- linear fit
+#--- slope error
 #
-        fitobj = kmpfit.Fitter(residuals=linear_res, data=(d, v, e))
-        fitobj.fit(params0 = paramsinit)
-    else:
-#
-#--- exp fit
-#
-        fitobj = kmpfit.Fitter(residuals=exp_res, data=(d, v, e))
-        fitobj.fit(params0 = paramsinit)
-    
-    return fitobj
+    xa    = sx / tot
+    ya    = sy / tot
+    xsum  = 0.0
+    ysum  = 0.0
+    for j in range(0, tot):
+        xsum += (x[i] - xa)**2
+        ysum += (y[i] - ya)**2
+    be    = math.sqrt(ysum/(tot-2)) / math.sqrt(xsum)
 
-#-----------------------------------------------------------------------------------------
-#-- linear_fit: linear model fit                                                       ---
-#-----------------------------------------------------------------------------------------
+    return [a, b, be]
 
-def linear_fit(param, x):
-    """
-    linear model fit
-    input: param: (a,b)
-    x independent val
-    ouptput: estimate
-    """
-    a, b = param
-
-    return (a + b * x)
-
-#-----------------------------------------------------------------------------------------
-#-- linear_res: linear model resitual                                                   --
-#-----------------------------------------------------------------------------------------
-
-def linear_res(param, data):
-    """
-    linear model resitual
-    input: param (a, b)
-    data  (x, y)
-    output: residual
-    """
-    a, b= param
-    x, y, e = data
-    
-    res =  y - (a + b * x)
-    return res
-
-#-----------------------------------------------------------------------------------------
-#-- exp_fit: exponential model                                                          --
-#-----------------------------------------------------------------------------------------
-
-def exp_fit(param, x):
-    """
-    exponential model
-    input: param (a, b)
-    x  independent variable
-    output: estimate
-    """
-    a, b = param
-
-    #return  (a * exp(-1.0 * b * x))
-    return  (a * (1.0 - exp(-1.0 * b * x)))
-
-#-----------------------------------------------------------------------------------------
-#-- exp_res: exponential model residual                                                ---
-#-----------------------------------------------------------------------------------------
-
-def exp_res(param, data):
-    """
-    exponential model residual
-    input param(a, b)
-    data (x, y)
-    output: residual
-    """
-    a, b= param
-    x, y, e = data
-    
-    res = y - (a * exp(-1.0 * b * x))
-    res = y - exp_fit(param, x)
-    return res
 
 #--------------------------------------------------------------------
 

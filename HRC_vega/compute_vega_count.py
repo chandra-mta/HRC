@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #############################################################################################
 #                                                                                           #
@@ -6,7 +6,7 @@
 #                                                                                           #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                       #
 #                                                                                           #
-#           Last Update: Jul 16, 2019                                                       #
+#           Last Update: Jan 26, 2021                                                       #
 #                                                                                           #
 #############################################################################################
 
@@ -20,13 +20,6 @@ import random
 import numpy
 import astropy.io.fits  as pyfits
 from datetime import datetime
-#
-#--- from ska
-#
-from Ska.Shell import getenv, bash
-
-ascdsenv = getenv('source /home/ascds/.ascrc -r release; source /home/mta/bin/reset_param ', shell='tcsh')
-ciaoenv  = getenv('source /soft/ciao/bin/ciao.sh')
 #
 #--- reading directory list
 #
@@ -44,9 +37,11 @@ for ent in data:
 #--- append path to a private folders
 #
 sys.path.append(mta_dir)
+sys.path.append(hrc_common)
 sys.path.append(bin_dir)
 
 import mta_common_functions     as mcf
+import hrc_common_functions     as hcf
 import adjust_vega_position     as avp
 import extract_vega_data        as evd
 import create_html_page         as chp
@@ -126,9 +121,9 @@ def create_data_tables(table):
 
         print(obsid)
 
-        fits  = run_arc5gl('retrieve', detector='hrc', level=2, filetype='evt2', obsid=str(obsid))
-
+        fits = hcf.run_arc5gl(0, 0, obsid=str(obsid), level='1', filetype='evt1')
         out   = extract_count_stats(fits)
+
         if out[-1] <0:
             continue
 
@@ -366,7 +361,7 @@ def get_dtf(obsid, fits):
 #
 #--- get dtf time list and dtf rate list
 #
-    dtf   = run_arc5gl('retrieve', detector='hrc', level=1, filetype='dtf', obsid=obsid)
+    dtf   = hcf.run_arc5gl(0, 0, obsid=str(obsid), level='1', filetype='dtf')
 
     t     = pyfits.open(dtf)
     tdata = t[1].data
@@ -424,113 +419,44 @@ def get_area(fits, ra, dec, radius, annul=0, outfile='circle_area.fits'):
             outfile --- a name of the created fits file
     output: outfile
     """
-
-    [skyx, skyy] = get_sky_coords(fits, ra, dec)
+    [detx, dety] = get_det_coords(fits, ra, dec)
 
     if annul == 0:
-        cmd = 'dmcopy "' + fits + '[sky=circle(' + str(skyx) + ',' + str(skyy) + ',' + str(radius)
+        cmd = 'dmcopy "' + fits + '[det=circle(' + str(detx) + ',' + str(dety) + ',' + str(radius)
         cmd = cmd  + ')]" outfile=' + outfile + ' clobber=yes'
     else:
-        cmd = 'dmcopy "' + fits + '[sky=annulus(' + str(skyx) + ',' + str(skyy) + ',' + str(radius)
+        cmd = 'dmcopy "' + fits + '[det=annulus(' + str(detx) + ',' + str(dety) + ',' + str(radius)
         cmd = cmd  + ',' + str(annul) + ')]" outfile=' + outfile + ' clobber=yes'
 
-    run_ascds(cmd)
-    if not os.path.isfile(outfile):
-        run_ciao(cmd)
-
-
+    os.system(cmd)
 
 #-----------------------------------------------------------------------------------------
-#-- get_sky_coords: convert ra/dec to skyx/skyy                                         --
+#-- get_det_coords: convert ra/dec to detx/dety                                         --
 #-----------------------------------------------------------------------------------------
 
-def get_sky_coords(fits, ra, dec):
+def get_det_coords(fits, ra, dec):
     """
-    convert ra/dec to skyx/skyy
+    convert ra/dec to detx/dety
     input:  fits    --- fits file name
             ra      --- ra
             dec     --- dec
-    output: [skyx, skyy]    --- ra/dec in sky coordinates
+    output: [detx, dety]    --- ra/dec in det coordinates
     """
 
     cmd = 'dmcoords ' + fits  + ' opt=cel ' + ' ra=' + str(ra)  + ' dec=' + str(dec)
     cmd = cmd + ' verbose=1 > ' + zspace
-    run_ascds(cmd)
+    os.system(cmd)
     data = mcf.read_data_file(zspace, remove=1)
 
     for ent in data:
-        mc  = re.search('SKY', ent)
+        mc  = re.search('DET', ent)
         if mc is not None:
             atemp = re.split('\s+', ent)
-            skyx  = atemp[-2]
-            skyy  = atemp[-1]
+            detx  = atemp[-2]
+            dety  = atemp[-1]
             break
 
-    return [skyx, skyy]
-
-#-----------------------------------------------------------------------------------------
-#-- run_arc5gl: run arc5gl                                                             ---
-#-----------------------------------------------------------------------------------------
-
-def run_arc5gl(operation, detector='hrc', subdetector='', level=1, filetype='evt1', obsid='', tstart='', tstop='', filename='', outfile='fits_list'):
-    """
-    run arc5gl
-    input:  operation   --- retrieve/browse
-            detector    --- detector
-            subdetector --- subdetector
-            level       --- level;      default: 1
-            filetype    --- filetype;   default: evt1
-            obsid       --- obsid;      default: ''
-            tstart      --- start time; default: ''
-            tstop       --- stop time;  default: ''
-            filename    --- file name   default: ''
-            outfile     --- output file name; default:  fits_list
-            if the param is "", it is ignored
-    output: extracted fits file
-            fits_list   --- returning the list of fits file name
-    """
-    line = 'operation=' + operation + '\n'
-    line = line + 'dataset=flight\n'
-    line = line + 'detector=' + detector + '\n'
-    line = line + 'level='    + str(level) + '\n'
-    line = line + 'filetype=' + filetype + '\n'
-    if subdetector != '':
-        line = line + 'subdetector=' + subdetector + '\n'
-    if obsid != '':
-        line = line + 'obsid='  + str(obsid)  + '\n'
-
-    if tstart != '':
-        line = line + 'tstart=' + str(tstart)  + '\n'
-        line = line + 'tstop='  + str(tstop)   + '\n'
-    if filename != '':
-        line = line + 'filename='  + filename   + '\n'
-
-    line = line + 'go\n'
-
-    fo   = open(zspace, 'w')
-    fo.write(line)
-    fo.close()
-
-    cmd  = '  /proj/sot/ska/bin/arc5gl  -user isobe -script ' +  zspace + ' > ' + outfile
-    run_ascds(cmd, clean=0)
-    mcf.rm_file(zspace)
-
-    out  = mcf.read_data_file(outfile)
-    fits_list = []
-    for ent in out:
-        mc = re.search('.fits.gz', ent)
-        if mc is not None:
-            fits_list.append(ent)
-
-    if len(fits_list) == 0:
-        return 'na'
-    elif len(fits_list) == 1:
-        return fits_list[0]
-    else:
-        return fits_list
-
-
-
+    return [detx, dety]
 
 #-----------------------------------------------------------------------------------------
 #-- read_header: read header info                                                       --
@@ -569,54 +495,6 @@ def read_header(fits):
     return [target, ra_pnt, dec_pnt, roll_pnt, ra_targ, dec_targ, ra_norm, dec_norm, roll_norm, detnam, obsid, date_obs, date_end, tstart, tstop, grating]
 
 #-----------------------------------------------------------------------------------------
-#-- run_ascds: run the command in ascds environment                                     --
-#-----------------------------------------------------------------------------------------
-
-def run_ascds(cmd, clean =0):
-    """
-    run the command in ascds environment
-    input:  cmd --- command line
-    clean   --- if 1, it also resets parameters default: 0
-    output: command results
-    """
-    if clean == 1:
-        acmd = '/usr/bin/env PERL5LIB=""  source /home/mta/bin/reset_param ;' + cmd
-    else:
-        acmd = '/usr/bin/env PERL5LIB=""  ' + cmd
-    
-    try:
-        bash(acmd, env=ascdsenv)
-    except:
-        try:
-            bash(acmd, env=ascdsnv)
-        except:
-            pass
-
-#-----------------------------------------------------------------------------------------
-#-- run_ciao: running ciao comannds                                                    ---
-#-----------------------------------------------------------------------------------------
-
-def run_ciao(cmd, clean =0):
-    """
-    run the command in ciao environment
-    input:  cmd --- command line
-    clean   --- if 1, it also resets parameters default: 0
-    output: command results
-    """
-    if clean == 1:
-        acmd = '/usr/bin/env PERL5LIB=""  source /home/mta/bin/reset_param ;' + cmd
-    else:
-        acmd = '/usr/bin/env PERL5LIB="" LD_LIBRARY_PATH=""   ' + cmd
-    
-    try:
-        bash(acmd, env=ciaoenv)
-    except:
-        try:
-            bash(acmd, env=ciaoenv)
-        except:
-            pass
-
-#-----------------------------------------------------------------------------------------
 #-- cell_to_det: convert ra/dec to det coordinates                                      --
 #-----------------------------------------------------------------------------------------
 
@@ -633,7 +511,7 @@ def cell_to_det(fits, ra, dec):
     cmd = 'dmcoords ' + fits  + ' opt=cel '
     cmd = cmd + ' ra=' + str(ra)  + ' dec=' + str(dec)
     cmd = cmd + ' verbose=1 > ' + zspace
-    run_ascds(cmd)
+    os.system(cmd)
     data = mcf.read_data_file(zspace, remove=1)
     detx = 0
     dety = 0

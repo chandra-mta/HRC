@@ -48,11 +48,6 @@ gamma_function.py
 -----------------
 fitting gamma funciton
 
-fit_voigt_profile.py #----- not used anymore
----------------------
-fitting Voigt or Gaussian profile on a given data 
-this is a copy from /data/mta/Scripts/Python2.7. modified for a specific use
-
 create_html_page.py
 -------------------
 create the main html page. this one is usually not used.
@@ -74,14 +69,15 @@ send out a notification when there is a new HZ43 observation
 Directory
 ++++++++++
 
+'/data/aschrc6/wilton/isobe/Project8/Scripts3.9/'                    :hrc_common
 '/data/aschrc6/wilton/isobe/Project8/HZ43/'                          :main_dir
 '/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/'                  :bin_dir
 '/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/house_keeping/'    :house_keeping
 '/data/aschrc6/wilton/isobe/Project8/HZ43/Data/'                     :data_dir
 '/data/aschrc6/wilton/isobe/Project8/HZ43/Exc/'                      :exc_dir
-'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/HZ43/'        :web_dir
-'/data/mta/Script/Python3.6/MTA/'                                    :mta_dir
-'http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/HZ43/'      :html_top
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_trendings/HZ43/'            :web_dir
+'/data/mta/Script/Python3.9/MTA/'                                    :mta_dir
+'http#//cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/HZ43/'      :html_top
 
 
 ++++++++++++++++++++++++++++++++++
@@ -124,9 +120,8 @@ http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/HZ43/hz43.html
 Environment Setting
 ++++++++++++++++++++
 
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
-
-setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
+source /home/ascds/.ascrc -r release
+setenv PYTHONPATH "/data/mta/Script/Python3.9/lib/python3.9/site-packages/"
 
 ++++++++
 Cron Job

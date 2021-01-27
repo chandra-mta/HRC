@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #########################################################################
 #                                                                       #
@@ -6,7 +6,7 @@
 #                                                                       #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                   #
 #                                                                       #
-#           last update: Jul 31, 2019                                   #
+#           last update: Jan 26, 2021                                   #
 #                                                                       #
 #########################################################################
 
@@ -51,8 +51,6 @@ sys.path.append(mta_dir)
 #--- converTimeFormat contains MTA time conversion routines
 #
 import mta_common_functions as mcf
-import find_moving_average  as fmv
-import robust_linear        as robust
 
 hrci_offset = [[0,0], [2,0], [0,2], [-2,0], [0,-2], [2,2], [-2,2], [-2,-2],\
                [2,-2], [4,0], [0,4],[-4,0], [0,-4], [6,0], [0,6], [-6,0],\
@@ -274,7 +272,7 @@ def get_frac_year(date):
 
 def plot_single_panel(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_list,  xname, yname, \
                       label, fsize = 9, psize = 60.0, marker = 's', pcolor =0, lcolor=0,\
-                      lsize=1, resolution=100, linefit=1, connect=0):
+                      lsize=1, resolution=100, connect=0):
     """
     plot a single data set on a single panel
     Input:  xmin    --- min x
@@ -297,7 +295,6 @@ def plot_single_panel(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_list,  
                               'maroon', 'black', 'olive', 'yellow')
             lsize:      fitted line width, defalut = 1
             resolution-- the resolution of the plot in dpi
-            linefit  --- if it is 1, fit a line estimated by robust method
             connect  --- if it is > 0, lsize data point with a line, the larger 
                                        the value thinker the line
     Output: png plot named <outname>
@@ -315,32 +312,31 @@ def plot_single_panel(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_list,  
         }
     """
 #
-#--- fit line --- use robust method
+#--- fit line 
 #
-    if linefit == 1:
-        xx = []
-        for m in range(0, len(xdata)):
-            xx.append(xdata[m] - 1999)
+    xx = []
+    for m in range(0, len(xdata)):
+        xx.append(xdata[m] - 1999)
 
-        [sint, slope, sa, serr, sint2, slope2, sa2, serr2] =  line_fit_prep(xx, ydata, yerror)
-        lint  =  '%2.3f' % (round(sint,  3))
-        lint2 =  '%2.3f' % (round(sint2, 3))
+    [sint, slope, sa, serr, sint2, slope2, sa2, serr2] =  line_fit_prep(xx, ydata, yerror)
+    lint  =  '%2.3f' % (round(sint,  3))
+    lint2 =  '%2.3f' % (round(sint2, 3))
 
-        if slope < 0:
-            sign = -1
-        else:
-            sign = 1
+    if slope < 0:
+        sign = -1
+    else:
+        sign = 1
 
-        if slope2 < 0:
-            sign2 = -1
-        else:
-            sign2 = 1
+    if slope2 < 0:
+        sign2 = -1
+    else:
+        sign2 = 1
 
-        lslope  = '%2.3f' % (round(abs(slope), 3))
-        lerr    = '%2.3f' % (round(serr,  3))
+    lslope  = '%2.3f' % (round(abs(slope), 3))
+    lerr    = '%2.3f' % (round(serr,  3))
 
-        lslope2 = '%2.3f' % (round(abs(slope2), 3))
-        lerr2   = '%2.3f' % (round(serr2,  3))
+    lslope2 = '%2.3f' % (round(abs(slope2), 3))
+    lerr2   = '%2.3f' % (round(serr2,  3))
 #
 #--- close everything opened before
 #
@@ -375,19 +371,18 @@ def plot_single_panel(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_list,  
 #
 #--- plot fitted line
 #
-    if linefit == 1:
-        start = sint + slope * (xmin - 1999)
-        if slope2 == 0:
-            stop  = sint + slope * (xmax - 1999)
-        else:
-            stop  = sint + slope * (year_div - 1999)
+    start = sint + slope * (xmin - 1999)
+    if slope2 == 0:
+        stop  = sint + slope * (xmax - 1999)
+    else:
+        stop  = sint + slope * (year_div - 1999)
 
-        plt.plot([xmin, year_div], [start, stop], color=colorList[lcolor], lw = lsize)
+    plt.plot([xmin, year_div], [start, stop], color=colorList[lcolor], lw = lsize)
 #
-        if slope2 != 0:
-            start = sint2 + slope2 * (year_div - 1999)
-            stop  = sint2 + slope2 * (xmax - 1999)
-            plt.plot([year_div, xmax], [start, stop], color=colorList[lcolor], lw = lsize)
+    if slope2 != 0:
+        start = sint2 + slope2 * (year_div - 1999)
+        stop  = sint2 + slope2 * (xmax - 1999)
+        plt.plot([year_div, xmax], [start, stop], color=colorList[lcolor], lw = lsize)
 #
 #--- add what is plotted on this plot
 #
@@ -397,33 +392,32 @@ def plot_single_panel(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_list,  
     ypos  = ymax - 0.08 * ydiff
     ypos2 = ymax - 0.12 * ydiff
 
-    if linefit == 1:
-        if slope2 == 0:
-            if sign >  0:
-                atext = 'Slope: '  + str(lslope) 
-                atext = atext + '+/-' + lerr
-            else:
-                atext = 'Slope: -'  + str(lslope) 
-                atext = atext + '+/-' + lerr
-
-            plt.text(xpos, ypos,  atext,  size=fsize)
+    if slope2 == 0:
+        if sign >  0:
+            atext = 'Slope: '  + str(lslope) 
+            atext = atext + '+/-' + lerr
         else:
-            if sign >  0:
-                atext = 'Slope (before ' + str(year_div) + '): '  + str(lslope) 
-                atext = atext + '+/-' + lerr
-            else:
-                atext = 'Slope (before ' + str(year_div) + '):  -'  + str(lslope) 
-                atext = atext + '+/-' + lerr 
-    
-            if sign2 > 0:
-                atext2 = 'Slope (after ' + str(year_div) + '): '  + str(lslope2) 
-                atext2 = atext2 + '+/-' + lerr2
-            else:
-                atext2 = 'Slope (after ' + str(year_div) + '): -'  + str(lslope2) 
-                atext2 = atext2 + '+/-' + lerr2
+            atext = 'Slope: -'  + str(lslope) 
+            atext = atext + '+/-' + lerr
 
-            plt.text(xpos, ypos,  atext,  size=fsize)
-            plt.text(xpos, ypos2, atext2, size=fsize)
+        plt.text(xpos, ypos,  atext,  size=fsize)
+    else:
+        if sign >  0:
+            atext = 'Slope (before ' + str(year_div) + '): '  + str(lslope) 
+            atext = atext + '+/-' + lerr
+        else:
+            atext = 'Slope (before ' + str(year_div) + '):  -'  + str(lslope) 
+            atext = atext + '+/-' + lerr 
+
+        if sign2 > 0:
+            atext2 = 'Slope (after ' + str(year_div) + '): '  + str(lslope2) 
+            atext2 = atext2 + '+/-' + lerr2
+        else:
+            atext2 = 'Slope (after ' + str(year_div) + '): -'  + str(lslope2) 
+            atext2 = atext2 + '+/-' + lerr2
+
+        plt.text(xpos, ypos,  atext,  size=fsize)
+        plt.text(xpos, ypos2, atext2, size=fsize)
 #
 #--- set the size of the plotting area in inch
 #
@@ -446,7 +440,7 @@ def plot_single_panel(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_list,  
 
 def create_thumb_nail_plots(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_list,  xname, yname, \
                       label, fsize = 0, psize = 30.0, marker = 's', pcolor =0, lcolor=0,\
-                      lsize=1, resolution=100, linefit=1, connect=0):
+                      lsize=1, resolution=100,  connect=0):
     """
     plot a single data set on a single panel for thumbmail plot
     Input:  xmin    --- min x
@@ -469,29 +463,27 @@ def create_thumb_nail_plots(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_l
                              'black', 'olive', 'yellow')
             lsize:      fitted line width, defalut = 1
             resolution-- the resolution of the plot in dpi
-            linefit  --- if it is 1, fit a line estimated by robust method
             connect  --- if it is > 0, lsize data point with a line, the larger the value 
                          thicker the line
     Output: png plot named <outname>
     """
 #
-#--- fit line --- use robust method
+#--- fit line 
 #
-    if linefit == 1:
-        xx = []
-        for m in range(0, len(xdata)):
-            xx.append(xdata[m] - 1999)
+    xx = []
+    for m in range(0, len(xdata)):
+        xx.append(xdata[m] - 1999)
 
-        [sint, slope, sa, serr, sint2, slope2, sa2, serr2] =  line_fit_prep(xx, ydata, yerror)
-        lint  =  '%2.3f' % (round(sint,  3))
+    [sint, slope, sa, serr, sint2, slope2, sa2, serr2] =  line_fit_prep(xx, ydata, yerror)
+    lint  =  '%2.3f' % (round(sint,  3))
 
-        if slope < 0:
-            sign = -1
-        else:
-            sign = 1
+    if slope < 0:
+        sign = -1
+    else:
+        sign = 1
 
-        lslope = '%2.3f' % (round(abs(slope), 3))
-        lerr   = '%2.3f' % (round(serr,  3))
+    lslope = '%2.3f' % (round(abs(slope), 3))
+    lerr   = '%2.3f' % (round(serr,  3))
 #
 #--- close everything opened before
 #
@@ -522,19 +514,18 @@ def create_thumb_nail_plots(xmin, xmax, ymin, ymax, xdata, ydata, yerror, info_l
 #
 #--- plot fitted line
 #
-    if linefit == 1:
-        if slope2 == 0:
-            start = sint + slope * (xmin - 1999)
-            stop  = sint + slope * (xmax - 1999)
-            plt.plot([xmin, xmax], [start, stop], color=colorList[lcolor], lw = lsize)
-        else:
-            start = sint + slope * (xmin - 1999)
-            stop  = sint + slope * (year_div - 1999)
-            plt.plot([xmin, year_div], [start, stop], color=colorList[lcolor], lw = lsize)
+    if slope2 == 0:
+        start = sint + slope * (xmin - 1999)
+        stop  = sint + slope * (xmax - 1999)
+        plt.plot([xmin, xmax], [start, stop], color=colorList[lcolor], lw = lsize)
+    else:
+        start = sint + slope * (xmin - 1999)
+        stop  = sint + slope * (year_div - 1999)
+        plt.plot([xmin, year_div], [start, stop], color=colorList[lcolor], lw = lsize)
 #
-            start = sint2 + slope2 * (year_div - 1999)
-            stop  = sint2 + slope2 * (xmax - 1999)
-            plt.plot([year_div, xmax], [start, stop], color=colorList[lcolor], lw = lsize)
+        start = sint2 + slope2 * (year_div - 1999)
+        stop  = sint2 + slope2 * (xmax - 1999)
+        plt.plot([year_div, xmax], [start, stop], color=colorList[lcolor], lw = lsize)
 #
 #--- remove tickers
 #

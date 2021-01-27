@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Jul 18, 2019                                                           #
+#           Last Update: Jan 21, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -59,18 +59,24 @@ olist  = ['hrc_i_coords', 'hrc_s_coords']
 #-- analyze_hz43_data: extract data, analyze and update data tables                    ---
 #-----------------------------------------------------------------------------------------
 
-def analyze_hz43_data():
+def analyze_hz43_data(obsid='', inst='i'):
     """
     extract data, analyze and update data tables
     input:  none but download data with arc5gl
     output: <house_keeping>/hrc_i_coords, <hosue_keeping>/hrc_s_coords
-            both has <obsid> <ra> <dec> <skyx> <skyy> 
+            both has <obsid> <ra> <dec> <detx> <dety> 
             <data_dir>/pi_* and samp_*
     """
 #
 #--- find new HZ43 observations data_set: [hrc-i, hrc-s]
 #
-    data_set = fhd.extract_calb_hz43()
+    if obsid == '':
+        data_set = fhd.extract_calb_hz43()
+    else:
+        if inst == 'i':
+            data_set = [[obsid,], []]
+        else:
+            data_set = [[], [obsid,]]
 
     if (len(data_set[0]) == 0) and (len(data_set[1]) == 0):
         print("No new HZ43 data found")
@@ -95,6 +101,9 @@ def analyze_hz43_data():
                                   level ='1',   filetype='evt1')
             if evt1 == "":
                 print("No evt1 file extracted")
+                sfile = house_keeping + 'skip_obsids'
+                with open(sfile, 'a') as fo:
+                    fo.write(str(obsid) + '\n')
                 continue
 #
 #--- get the ra/dec of HZ43 adjusted to proper motion
@@ -104,29 +113,31 @@ def analyze_hz43_data():
             otime     = fhead['DATE-OBS']
             [ra, dec] = ahp.adjust_hz43_position(otime)
 #
-#--- convert coordinates from cel to sky
+#--- convert coordinates from cel to det
 #
             cmd = 'dmcoords ' + evt1 + ' opt=cel ra=' + str(ra) + ' dec=' + str(dec) 
             cmd = cmd + ' verbose=1 > ' + zspace
-            hcf.run_ciao(cmd)
+            os.system(cmd)
 #
-#--- extract sky coordindats
+#--- extract det coordindats
 #
             info = mcf.read_data_file(zspace, remove=1)
-            out  = get_skyp_coord(info)
+            out  = get_detp_coord(info)
             if out == False:
                 continue
 
-            skyx  = out[0]
-            skyy  = out[1]
+            detx  = out[0]
+            dety  = out[1]
             
             zout  = str(obsid) + '\t' + str(ra) + '\t' + str(dec) + '\t' 
-            zout  = zout       + str(skyx) + '\t' + str(skyy) + '\n'
+            zout  = zout       + str(detx) + '\t' + str(dety) + '\n'
             zline = zline + zout
 #
 #--- upate the data table
 #
-            ehs.extract_hz43_stat(obsid,  evt1)
+            fchk = ehs.extract_hz43_stat(obsid,  evt1)
+            if fchk == False:
+                continue
 
         if zline != "":
             ofile = house_keeping + olist[k]
@@ -213,16 +224,17 @@ def coords_list(alist):
 #-----------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
-def get_skyp_coord(info):
+def get_detp_coord(info):
 
     for ent in info:
-        mc = re.search('SKY', ent)
+        #mc = re.search('SKY', ent)
+        mc = re.search('DETX,DETY', ent)
         if mc is not None:
             atemp = re.split('\s+', ent)
-            skyx  = float(atemp[1])
-            skyy  = float(atemp[2])
+            detx  = float(atemp[1])
+            dety  = float(atemp[2])
 
-            return [skyx, skyy]
+            return [detx, dety]
 
     return False
 
@@ -230,5 +242,12 @@ def get_skyp_coord(info):
 
 if __name__ == '__main__':
 
-    analyze_hz43_data()
+    if len(sys.argv) == 3:
+        obsid = sys.argv[1].strip()
+        inst  = sys.argv[2].strip()
+    else:
+        obsid = ''
+        inst  = 'i'
+
+    analyze_hz43_data(obsid, inst)
 

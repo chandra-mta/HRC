@@ -1,8 +1,8 @@
-'/data/aschrc6/wilton/isobe/Project8/Scripts/'                        :hrc_common
+'/data/aschrc6/wilton/isobe/Project8/Scripts3.9/'                     :hrc_common
 '/data/aschrc6/wilton/isobe/Project8/ArLac/'                          :main_dir
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts/'                  :bin_dir
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts/house_keeping/'    :house_keeping
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Data/'                     :data_dir
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Exc/'                      :exc_dir
-'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/ArLac/'        :html_dir
-'/data/mta/Script/Python3.6/MTA/'                                     :mta_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_trendings/ArLac/'            :html_dir
+'/data/mta/Script/Python3.9/MTA/'                                     :mta_dir

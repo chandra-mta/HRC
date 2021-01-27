@@ -1,12 +1,12 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #############################################################################################
 #                                                                                           #
-#           create_profile_plot.py: fit voigt profile on the data and creat a plot          #
+#           create_profile_plot.py: fit gamma profile on the data and creat a plot          #
 #                                                                                           #
 #           author: t. isobe(tisobe@cfa.harvard.edu)                                        #
 #                                                                                           #
-#           Last Update:    Jul 18, 2017                                                    #
+#           Last Update:    Jan 21, 2021                                                    #
 #                                                                                           #
 #############################################################################################
 
@@ -19,12 +19,6 @@ import math
 import numpy
 import time
 #
-#--- from ska
-#
-from Ska.Shell import getenv, bash
-
-ascdsenv = getenv('source /home/ascds/.ascrc -r release', shell='tcsh')
-#
 #--- reading directory list
 #
 path = '/data/aschrc6/wilton/isobe/Project8/HZ43/Scripts/house_keeping/dir_list'
@@ -34,8 +28,8 @@ with  open(path, 'r') as f:
 
 for ent in data:
     atemp = re.split(':', ent)
-    var  = atemp[1].strip()
-    line = atemp[0].strip()
+    var   = atemp[1].strip()
+    line  = atemp[0].strip()
     exec("%s = %s" %(var, line))
 html_top = html_top.replace('#', ':')
 #
@@ -47,7 +41,6 @@ sys.path.append(mta_dir)
 #--- import several functions
 #
 import mta_common_functions       as mcf  #---- contains other functions commonly used in MTA scripts
-import fit_voigt_profile          as voigt
 import gamma_function             as gamma
 #
 #--- temp writing file name
@@ -75,7 +68,7 @@ def run_for_all_profile_plot():
     try:
         c_file = house_keeping + 'chk_save'
         with open(c_file, 'r') as f:
-            chk_save = f.read().strip()
+            chk_save = int(f.read())
     except:
         pass
 
@@ -101,12 +94,12 @@ def run_for_all_profile_plot():
         create_profile_plot(obsid)
 
 #---------------------------------------------------------------------------------------------------
-#-- create_profile_plot: fit voigt profile on the data and creat a plot                          ---
+#-- create_profile_plot: fit gamma profile on the data and creat a plot                          ---
 #---------------------------------------------------------------------------------------------------
 
 def  create_profile_plot(obsid):
     """
-    fit voigt profile on the data and creat a plot
+    fit gamma profile on the data and creat a plot
     input:  obsid   --- obsid. the data is read from <data_dir>
     output: <web_dir>/Plots/Indivisual_Plots/<obsid>/<head>_<col #>_vfits.png
     """
@@ -134,19 +127,19 @@ def  create_profile_plot(obsid):
                 fo.write(sline)
             
 #---------------------------------------------------------------------------------------------------
-#-- create_plot_and_table_entry: fit a voigt profile on the data, 
+#-- create_plot_and_table_entry: fit a gamma profile on the data, 
 #-- create a plot, and return the fitting results 
 #---------------------------------------------------------------------------------------------------
 
 def create_plot_and_table_entry(head, pos, obsid, fname):
     """
-    fit a voigt profile on the data, create a plot, and return the fitting results
+    fit a gamma profile on the data, create a plot, and return the fitting results
     input:  head    --- head part of the file
             pos     --- position of the data. either center of cell <#>
             obsid   --- obsid
             fname   --- the data file name
     output: <web_dir>/Plots/Indivisual_Plots/<obsid>/<head>_<col #>_vfits.png
-            line    --- voight fitted results in a table column form
+            line    --- fitted results in a table column form
     """
 
     if not  os.path.isfile(fname):
@@ -160,12 +153,10 @@ def create_plot_and_table_entry(head, pos, obsid, fname):
     except:
         return False
 #
-#--- fit a voigt distribution on the data
+#--- fit a gamma distribution on the data
 #
     title = 'ObsID: ' + str(obsid)
     [a, b, h]  = gamma.fit_gamma_profile(abin, data, avg, std, plot_title=title)
-    #[center, width, amp, alphaD, alphaL, I, a_back, b_back]  \
-        #= voigt.fit_voigt_profile(abin, data, type='voigt', plot_title=title)
 #
 #--- rename a plotting file
 #            
@@ -186,14 +177,6 @@ def create_plot_and_table_entry(head, pos, obsid, fname):
 #--- keep the fitting results
 #
     line = str(pos) + '\t'
-    #line = line + str(center) + '\t'
-    #line = line + str(width)  + '\t'
-    #line = line + str(amp)    + '\t'
-    #line = line + str(alphaD) + '\t'
-    #line = line + str(alphaL) + '\t'
-    #line = line + str(I)      + '\t'
-    #line = line + str(a_back) + '\t'
-    #line = line + str(b_back) + '\n'
     line = line + str(a) + '\t'
     line = line + str(b) + '\t'
     line = line + str(h) + '\n'

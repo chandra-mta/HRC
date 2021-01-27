@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -9,7 +9,7 @@
 #           Caution: dmcopy may not work under ascds or ciao.                   #
 #                    if one does not work, try other                            #
 #                                                                               #
-#           Last Update: Jul 30, 2019                                           #
+#           Last Update: Jan 26, 2021                                           #
 #                                                                               #
 #################################################################################
 
@@ -154,23 +154,26 @@ def get_dead_period(obsid):
 #
 #--- read out time and dtf column from the fits file
 #
-    tdata = hcf.read_fits_file(dtf)
-    tout  = hcf.extract_col_data(tdata[1], ['time', 'dtf'])
-
+    t     = pyfits.open(dtf)
+    fdata = t[1].data
+    tdata = fdata['time']
+    ddata = fdata['dtf']
+    t.close()
+    
     mcf.rm_files(dtf)
 #
 #--- find the period which match the condition (dtf<=0.98)
 #
     pstart = []
     pstop  = []
-    for k in range(0, len(tout)):
-        if float(tout[k][1]) <= 0.98:
-            time = int(float(tout[k][0]))
+    for k in range(0, len(tdata)):
+        if float(ddata[k]) <= 0.98:
+            xtime = int(float(tdata[k]))
 #
 #--- take the period to be +/- 2 of the center value listed
 #
-            pstart.append(time - 2)
-            pstop.append(time  + 2)
+            pstart.append(xtime - 2)
+            pstop.append(xtime  + 2)
 
     return [pstart, pstop]
 
@@ -185,10 +188,7 @@ def filter_by_status(fits):
     output: fits    --- status filtered fits file
     """
     cmd  = ' dmcopy "' + fits + '[status=0000xxxx000xxxxx]" outfile=zxc.fits clobber=yes'
-
-    hcf.run_ciao(cmd)
-    if not os.path.isfile('zxc.fits'):
-        hrc.run_ascds(cmd)
+    os.system(cmd)
 
     cmd  = 'mv zxc.fits ' + fits
     os.system(cmd)

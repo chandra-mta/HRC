@@ -1,12 +1,12 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #####################################################################################################
 #                                                                                                   #
-#       hrc_gain_fit_voigt.py: extract hrc evt2 files and fit a normal distribution on pha values   #
+#       hrc_gain_run.py: extract hrc evt2 files and fit a normal distribution on pha values         #
 #                                                                                                   #
 #           author: t. isobe(tisobe@cfa.harvard.edu)                                                #
 #                                                                                                   #
-#           Last Update:    Sep 05, 2019                                                            #
+#           Last Update:    Jan 26, 2021                                                            #
 #                                                                                                   #
 #####################################################################################################
 
@@ -17,7 +17,20 @@ import string
 import random
 import math
 import time
-import random
+
+#import matplotlib as mpl
+#
+#if __name__ == '__main__':
+#    mpl.use('Agg')
+#
+#from pylab import *
+#import matplotlib.pyplot as plt
+#import matplotlib.font_manager as font_manager
+#import matplotlib.lines as lines
+#
+#import mpld3
+#from mpld3 import plugins, utils
+
 #
 #--- reading directory list
 #
@@ -47,8 +60,13 @@ import order_by_time            as obt
 #
 #--- temp writing file name
 #
+import random
 rtail  = int(time.time() * random.random())
 zspace = '/tmp/zspace' + str(rtail)
+#
+#--- admin
+#
+admin = 'tisobe@cfa.harvard.edu'
 
 #---------------------------------------------------------------------------------------------------
 #-- hrc_gain_run: extract hrc evt2 file, find the brightest object and create pha distribution     -
@@ -84,14 +102,18 @@ def  hrc_gain_run(c_input):
 #
 #--- analyze data
 #
-        hgfv.hrc_gain_fit_voigt(candidate_list)
+        chk = hgfv.hrc_gain_fit_voigt(candidate_list)
 #
 #--- create plots
 #
-        obt.order_by_time()
-        hgtp.hrc_gain_trend_plot()
-
-        send_notification()
+        if chk == True:
+            obt.order_by_time()
+            hgtp.hrc_gain_trend_plot()
+    
+            send_notification()
+            
+            cmd = 'rm -rf ' + exc_dir + 'hrcf*fits*'
+            os.system(cme)
 
 #-----------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
@@ -107,7 +129,7 @@ def send_notification():
         fo.write(text)
     
     cmd = 'cat ' + zspace + ' |mailx -s "Subject: New AR Lac Observation" vkashyap@cfa.harvard.edu'
-    os.system(cmd)
+    ####os.system(cmd)
     cmd = 'cat ' + zspace + ' |mailx -s "Subject: New AR Lac Observation" ' + admin
     os.system(cmd)
     

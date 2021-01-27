@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #####################################################################################
 #                                                                                   #
@@ -6,7 +6,7 @@
 #                                                                                   #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                   #
-#           Last Update: Jan 12, 2021                                               #
+#           Last Update: Jan 26, 2021                                               #
 #                                                                                   #
 #####################################################################################
 
@@ -239,7 +239,7 @@ def convert_to_coordinates(ra, dec, evt, ctype):
     """
     cmd = 'dmcoords ' + evt + ' opt=cel ra=' + str(ra) + ' dec=' 
     cmd = cmd + str(dec) + ' verbose=1 > ' + zspace
-    hcf.run_ascds(cmd)
+    os.system(cmd)
 
     newx= ''
     newy= ''
@@ -372,12 +372,9 @@ def get_target_data(obsid, evt1, clean, carea, barea, ra_targ, dec_targ, yoffset
 #
     [radius, annul1, annul2, tarea, sarea, cx, cy] = set_radius(yoffset, zoffset, inst)
 #
-#--- check whether manually determined sky coordinates are available 
-#
     try:
-        #cmd = ' celldetect ' + evt1 + ' outfile=zinfo.fits clobber=yes'
         cmd = ' tgdetect ' + evt1 + ' none outfile=zinfo.fits clobber=yes'
-        hcf.run_ascds(cmd)
+        os.system(cmd)
     
         t     = pyfits.open('zinfo.fits')
         tdata = t[1].data
@@ -408,12 +405,7 @@ def get_target_data(obsid, evt1, clean, carea, barea, ra_targ, dec_targ, yoffset
 #
     cmd   = 'dmcopy "' + clean + '[(x,y)=circle(' + str(x) + ',' + str(y) 
     cmd   = cmd + ',' + str(radius) + ')]" outfile=' + carea + ' clobber=yes'
-#
-#--- sometime ascds does not work with dmcopy. if so, use ciao
-#
-    hcf.run_ciao(cmd)
-    if not os.path.isfile(carea):
-        hcf.run_ascds(cmd)
+    os.system(cmd)
 
 #
 #--- background area; annulus around the source position
@@ -428,11 +420,8 @@ def get_target_data(obsid, evt1, clean, carea, barea, ra_targ, dec_targ, yoffset
     cmd   = 'dmcopy "' + clean + '[(x,y)=annulus(' + str(px) + ',' + str(py)  
     cmd   = cmd + ',' +  str(annul1) + ',' + str(annul2)
     cmd   = cmd + ')]" outfile=' + barea + ' clobber=yes'
+    os.system(cmd)
 
-    hcf.run_ciao(cmd)
-    if not os.path.isfile(barea):
-        hcf.run_ascds(cmd)
-    
     line  = str(psave[0])
     for  k in range(1, len(psave)):
         line  = line + '\t'  + str(psave[k])

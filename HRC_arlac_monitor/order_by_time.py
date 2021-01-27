@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Jul 23, 2019                                                           #
+#           Last Update: Jan 22, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -33,8 +33,11 @@ for ent in data:
 #--- append path to a private folders
 #
 sys.path.append(mta_dir)
+sys.path.append(bin_dir)
+sys.path.append(hrc_common)
 
 import mta_common_functions as mcf
+import hrc_common_functions as hcf
 #
 #--- temp writing file name
 #
@@ -68,7 +71,8 @@ def order_by_time():
         for ent in data:
             atemp = re.split('\s+', ent)
             ctime = atemp[2]
-            stime = mcf.convert_date_format(ctime, ifmt='%Y-%m-%dT%H:%M:%S', ofmt='chandra')
+            stime = hcf.convert_time_to_stime(ctime, tformat='%Y-%m-%dT%H:%M:%S')
+
             ddict[stime] = ent
             dlist.append(stime)
 #

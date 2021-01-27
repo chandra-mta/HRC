@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Sep 05, 2019                                                           #
+#           Last Update: Jan 21, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -35,10 +35,8 @@ html_top = html_top.replace('#', ':')
 #
 sys.path.append(mta_dir)
 sys.path.append(bin_dir)
-sys.path.append(hrc_common)
 
 import mta_common_functions as mcf
-import hrc_common_functions as hcf
 #
 #--- temp writing file name
 #
@@ -71,7 +69,7 @@ def sendout_email():
             fo.write(text)
 
         cmd = 'cat ' + zspace + ' |mailx -s "Subject: New HZ43 Observation" vkashyap@cfa.harvard.edu'
-        os.system(cmd)
+        #####os.system(cmd)
 
         cmd = 'cat ' + zspace + ' |mailx -s "Subject: New HZ43 Observation" ' + admin
         os.system(cmd)
@@ -84,6 +82,12 @@ def sendout_email():
         os.system(cmd)
         cmd = 'chgrp -R mtagroup /data/aschrc6/wilton/isobe/Project8/HZ43/Data/*'
         os.system(cmd)
+#
+#--- change chk_save to 0
+#
+        cfile = house_keeping + 'chk_save'
+        with open(cfile, 'w') as fo:
+            fo.write('0\n')
 
 #-----------------------------------------------------------------------------------------
 

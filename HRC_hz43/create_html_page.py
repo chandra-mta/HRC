@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #       author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                               #
-#       last update: Jul 15, 2019                                               #
+#       last update: Jan 21, 2021                                               #
 #                                                                               #
 #################################################################################
 
@@ -52,6 +52,19 @@ def create_html_page():
     input:  none but read from the data files
     output: <web_dir>/hz43.html
     """
+#
+#--- check whether there are new data
+#
+    chk_save = 0
+    try:
+        c_file = house_keeping + 'chk_save'
+        with open(c_file, 'r') as f:
+            chk_save = int(f.read())
+    except:
+        pass
+
+    if chk_save == 0:
+        exit(1)
 #
 #--- read fitting results and extract slope data; put in a dictionary form
 #

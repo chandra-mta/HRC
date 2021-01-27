@@ -56,8 +56,9 @@ Directories:
 '/data/aschrc6/wilton/isobe/Project8/Vega/Scripts/house_keeping/'    :house_keeping
 '/data/aschrc6/wilton/isobe/Project8/Vega/Data/'                     :data_dir
 '/data/aschrc6/wilton/isobe/Project8/Vega/Exc/'                      :exc_dir
-'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/Vega/'        :html_dir
-'/data/mta/Script/Python3.6/MTA/'                                    :mta_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_trendings/Vega/'            :html_dir
+'/data/aschrc6/wilton/isobe/Project8/Scripts3.9/'                    :hrc_common
+'/data/mta/Script/Python3.9/MTA/'                                    :mta_dir
 
 =============
 house_keeping

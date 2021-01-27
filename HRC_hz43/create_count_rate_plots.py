@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #####################################################################################
 #                                                                                   #
@@ -6,7 +6,7 @@
 #                                                                                   #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                   #
-#           last update: Jul 16, 2019                                               #
+#           last update: Jan 21, 2021                                               #
 #                                                                                   #
 #####################################################################################
 
@@ -40,8 +40,8 @@ with  open(path, 'r') as f:
 
 for ent in data:
     atemp = re.split(':', ent)
-    var  = atemp[1].strip()
-    line = atemp[0].strip()
+    var   = atemp[1].strip()
+    line  = atemp[0].strip()
     exec("%s = %s" %(var, line))
 html_top = html_top.replace('#', ':')
 #
@@ -76,7 +76,7 @@ def create_count_rate_plots():
     try:
         c_file = house_keeping + 'chk_save'
         with open(c_file, 'r') as f:
-            chk_save = f.read().strip()
+            chk_save = int(f.read())
     except:
         pass
     if chk_save == 0:

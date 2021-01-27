@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #############################################################################################
 #                                                                                           #
@@ -6,7 +6,7 @@
 #                                                                                           #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                       #
 #                                                                                           #
-#           Last Update: Jul 18, 2019                                                       #
+#           Last Update: Jan 21, 2021                                                       #
 #                                                                                           #
 #############################################################################################
 
@@ -21,11 +21,6 @@ import random
 import numpy
 import astropy.io.fits  as pyfits
 from datetime import datetime
-#
-#--- from ska
-#
-from Ska.Shell import getenv, bash
-ascdsenv = getenv('source /home/ascds/.ascrc -r release ', shell='tcsh')
 #
 #--- reading directory list
 #
@@ -50,6 +45,7 @@ sys.path.append(hrc_common)
 import mta_common_functions as mcf
 import filter_evt_file      as fef
 import hrc_common_functions as hcf
+import adjust_hz43_position as ahp
 #
 #--- temp writing file name
 #
@@ -116,6 +112,15 @@ def extract_hz43_stat(obsid, evt1):
     
         oname = 'samp_center_list'
         print_out(obsid, hdata, sp_stats, oname)
+    else:
+        fout = house_keeping + 'skip_obsids'
+        with open(fout, 'a') as fo:
+            fo.write(str(obsid) + '\n')
+
+        cmd = 'rm *.fits*'
+        os.system(cmd)
+
+        return False
 #
 #---    bin_data below contains:
 #---    [samp_p_list, samp_n_list, pi_p_list, pi_n_list, 
@@ -154,6 +159,8 @@ def extract_hz43_stat(obsid, evt1):
 #
     cmd = 'rm *.fits*'
     os.system(cmd)
+
+    return True
 
 #-----------------------------------------------------------------------------------------
 #-- print_out: print out the center data                                              --
@@ -216,6 +223,10 @@ def extract_data(obsid, evt1):
     evta = hcf.run_arc5gl(0, 0,  obsid = obsid, operation='retrieve', level ='1.5', filetype='tgevt1')
     if evta == "":
         print("no EVT1.5 fits file")
+        sfile = house_keeping + 'skip_obsids'
+        with open(sfile, 'a') as fo:
+            fo.write(str(obsid) + '\n')
+
         return False
 #
 #--- find which instrument
@@ -304,15 +315,20 @@ def get_center_data(obsid, evt1, clean, carea, barea):
     output: carea /barea
     """
 #
-#--- get sky coordinates computed previously
+#--- get det coordinates computed previously
 #
-    [skyx, skyy] = check_sky_coord_list(obsid)
+    [detx, dety] = find_det_coordinates(evt1)
 #
 #--- try tgdetect to find the center part first
 #
+    dchk = 0
     try:
         cmd = ' tgdetect ' + evt1 + ' none outfile=zinfo.fits clobber=yes'
-        hcf.run_ascds(cmd)
+        os.system(cmd)
+
+        if not os.path.isfile('./zinfo.fits'):
+            return False
+
     
         t     = pyfits.open('zinfo.fits')
         tdata = t[1].data
@@ -321,32 +337,15 @@ def get_center_data(obsid, evt1, clean, carea, barea):
         test = tdata.field('x')[0]
         dchk = 1
 #
-#--- if tgdetect does not work try celldetect
-#
     except:
-        cmd = ' celldetect ' + evt1 + ' outfile=zinfo.fits clobber=yes'
-        hcf.run_ascds(cmd)
-        t     = pyfits.open('zinfo.fits')
-        tdata = t[1].data
-        data  = tdata['net_counts']
-        if len(data) > 0:
-            dmax  = 0
-            pos   = 0
-            for k in range(0, len(data)):
-                val = float(data[k])
-                if val > dmax:
-                    dmax = val
-                    pos  = k
-            dchk = 2
-        else:
-            if skyx == '':
-                return False
-            else:
-                dchk = 3
+        sfile = house_keeping + 'skip_obsids'
+        with open(sfile, 'a') as fo:
+            fo.write(str(obsid) + '\n')
+        return False
 #
 #--- get the information about the center source area
 #
-    if dchk == 1 or dchk == 2:
+    if dchk == 1:
         psave = []
         for ent in ('x', 'y', 'net_counts', 'net_counts_err', 'bkg_counts', \
                     'bkg_counts_err', 'net_rate', 'net_rate_err', 'bkg_rate',\
@@ -356,33 +355,26 @@ def get_center_data(obsid, evt1, clean, carea, barea):
                 out   = data[pos]
                 psave.append(out)
             except:
-                if skyx == '':
+                if detx == '':
                     return False
 
     mcf.rm_files('zinfo.fits')
 #
 #--- center part
 #
-    if skyx != '':
-        cmd   = 'dmcopy "' + clean + '[(x,y)=circle(' + str(skyx) + ',' + str(skyy) 
+    if detx != '':
+        cmd   = 'dmcopy "' + clean + '[(detx,dety)=circle(' + str(detx) + ',' + str(dety) 
     else:
-        cmd   = 'dmcopy "' + clean + '[(x,y)=circle(' + str(psave[0]) + ',' + str(psave[1]) 
+        cmd   = 'dmcopy "' + clean + '[(detx,dety)=circle(' + str(psave[0]) + ',' + str(psave[1]) 
     cmd   = cmd + ',200)]" outfile=' + carea + ' clobber=yes'
-#
-#--- dmcopy may not work with ascds; if so use ciao
-#
-    hcf.run_ascds(cmd)
-    if not os.path.isfile(carea):
-        hcf.run_ciao(cmd)
+    os.system(cmd)
 #
 #--- background area; 400 pix above the center area
 #
     ypos  = float(psave[1]) + 400
-    cmd   = 'dmcopy "' + clean + '[(x,y)=circle(' + str(psave[0]) + ',' + str(ypos) 
+    cmd   = 'dmcopy "' + clean + '[(detx,dety)=circle(' + str(psave[0]) + ',' + str(ypos) 
     cmd   = cmd + ', 200)]" outfile=' + barea + ' clobber=yes'
-    hcf.run_ascds(cmd)
-    if not os.path.isfile(barea):
-        hcf.run_ciao(cmd)
+    os.system(cmd)
     
     line  = str(psave[0])
     for  k in range(1, len(psave)):
@@ -397,37 +389,40 @@ def get_center_data(obsid, evt1, clean, carea, barea):
     return True
 
 #-----------------------------------------------------------------------------------------
-#-- check_sky_coord_list: check whether manually determined sky cooridates are avaliable -
+#-- find_det_coordinates: check whether manually determined det cooridates are avaliable -
 #-----------------------------------------------------------------------------------------
 
-def check_sky_coord_list(obsid):
+def find_det_coordinates(evt1):
     """
-    check whether manually determined sky cooridates are avaliable
-    input:  obsid   --- obsid
-    output: [skyx, skyy]    --- sky coordinates
+    check whether manually determined det cooridates are avaliable
+    input:  evt1            --- evt1 fits file name
+    output: [detx, dety]    --- det coordinates
     """
-
-    iobsid = int(float(obsid))
-
-    ifile = house_keeping + 'hrc_i_coords'
-    sfile = house_keeping + 'hrc_s_coords'
-
-    data1 = mcf.read_data_file(ifile)
-
-    data2 = mcf.read_data_file(sfile)
-
-    data = data1 + data2
-    skyx = ''
-    skyy = ''
-    for ent in data:
-        atemp = re.split('\s+', ent)
-        chk = int(float(atemp[0]))
-        if chk == iobsid:
-            skyx = atemp[3]
-            skyy = atemp[4]
+    fout      = pyfits.open(evt1)
+    fhead     = fout[1].header
+    otime     = fhead['DATE-OBS']
+    [ra, dec] = ahp.adjust_hz43_position(otime)
+#
+#--- convert coordinates from cel to det
+#
+    cmd = 'dmcoords ' + evt1 + ' opt=cel ra=' + str(ra) + ' dec=' + str(dec)
+    cmd = cmd + ' verbose=1 > ' + zspace
+    os.system(cmd)
+#
+#--- extract det coordindats
+#
+    detx = 0.0
+    dety = 0.0
+    info = mcf.read_data_file(zspace, remove=1)
+    for ent in info:
+        mc = re.search('DETX,DETY', ent)
+        if mc is not None:
+            atemp = re.split('\s+', ent)
+            detx = float(atemp[1])
+            dety = float(atemp[2])
             break
 
-    return [skyx, skyy]
+    return [detx, dety]
 
 #-----------------------------------------------------------------------------------------
 #-- get_arm_data: run select_letg_arm  to get the letg covered area and background area  -
@@ -665,7 +660,7 @@ def save_ind_dist(sdir, samp_p_list, samp_n_list, pi_p_list, pi_n_list):
             samp_n_list --- negative side samp data
             pi_p_list   --- positive side pi data
             pi_n_list   --- negative side pi data
-    output: <sidr>/samp_p_list<#> etc
+    output: <sdir>/samp_p_list<#> etc
     """
     for k in range(0, 18):
         try:
@@ -704,7 +699,7 @@ def save_ind_dist_center(sdir, pi_list, samp_list):
             samp_n_list --- negative side samp data
             pi_p_list   --- positive side pi data
             pi_n_list   --- negative side pi data
-    output: <sidr>/samp_p_list<#> etc
+    output: <sdir>/samp_p_list<#> etc
     """
     try:
         oname = sdir + '/samp_center_list'
@@ -728,14 +723,14 @@ def print_out_dist(odata, oname):
     input:  odata   --- data (one dimension)
             oname   --- output file name
     """
-    #if len(odata) < 10:
-    #    return False
+    if len(odata) < 10:
+        return False
 
     with open(oname, 'w') as fo:
         for ent in odata:
             fo.write(str(ent)+ '\n')
 
-    #return True
+    return True
 
 #-----------------------------------------------------------------------------------------
 #-- create_stat_table: create a table of stat results for a given data sets             --
@@ -865,6 +860,22 @@ def add_coldata_to_fits(ofits1, ofits2, col_names, outfile):
     atable = pyfits.open(ofits2)[1].data
     acols  = atable.columns
 #
+#--- extract informaiton of the columns and the column data which are not overlapped with
+#--- the data to be added
+#
+    out        = ocols.names
+    ocol_names = numpy.setdiff1d(out, col_names)
+    save = []
+    for col in ocol_names:
+        cent = ocols[col]
+        data = otable[col]
+        ndat = pyfits.Column(name=cent.name, format=cent.format, unit=cent.unit, array=data)
+        save.append(ndat)
+#
+#--- set the column data
+#
+    oldcols  = pyfits.ColDefs(save)
+#
 #--- extreact information of the columns and the column data to be added from the
 #--- second fits file
 #
@@ -881,7 +892,8 @@ def add_coldata_to_fits(ofits1, ofits2, col_names, outfile):
 #
 #--- combine the data
 #
-    hdu = pyfits.BinTableHDU.from_columns(ocols + newcols)
+    #hdu = pyfits.BinTableHDU.from_columns(ocols + newcols)
+    hdu = pyfits.BinTableHDU.from_columns(oldcols + newcols)
 #
 #--- create the new fits file
 #
@@ -949,7 +961,7 @@ def select_letg_arm(ofits, outfile, include=1):
     cmd = cmd + '+polygon' + area2
     cmd = cmd + ']" outfile=' +  outfile + ' clobber="yes"'
 
-    hcf.run_ascds(cmd)
+    os.system(cmd)
 
 #-----------------------------------------------------------------------------------------
 #-- get_bkg_subtracted_stats: create background adjusted statistics                     --
@@ -1065,6 +1077,9 @@ def get_bkg_subtracted_stats(data, bkg, tspan, area, barea, cent=0):
 if __name__ == '__main__':
 
     obsid = sys.argv[1]
-    inst  = sys.argv[2]
-    evt1  = sys.argv[3]
-    extract_hz43_stat(obsid, inst, evt1)
+    evt1  = sys.argv[2]
+    out = extract_hz43_stat(obsid, evt1)
+    if out:
+        print("Data OK")
+    else:
+        print("Data FAILED")

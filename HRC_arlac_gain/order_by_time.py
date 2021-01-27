@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Jul 22, 2019                                                           #
+#           Last Update: Jan 25, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 

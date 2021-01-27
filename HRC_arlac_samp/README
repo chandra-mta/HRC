@@ -65,10 +65,11 @@ Directory
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts3/'                 :bin_dir
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts3/house_keeping/'   :house_keeping
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Data3/'                    :data_dir
-'/data/aschrc6/wilton/isobe/Project8/ArLac/Exc/'                      :exc_dir
-'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/ArLac/'        :web_dir
-'/data/mta/Script/Python_script2.7/'                                  :mta_dir
-'http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/'      :html_top
+'/data/aschrc6/wilton/isobe/Project8/ArLac/Exc3/'                     :exc_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_trendings/ArLac/'            :web_dir
+'/data/mta/Script/Python3.9/MTA/'                                     :mta_dir
+'/data/aschrc6/wilton/isobe/Project8/Scripts3.9/'                     :hrc_dir
+'http#//cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/'      :html_top
 
 
 ++++++++++++++++++++++++++++++++++
@@ -139,7 +140,9 @@ http://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/arlac_trends.html
 ++++++++++++++++++++
 Environment Setting
 ++++++++++++++++++++
-source /proj/sot/ska/bin/ska_envs.csh
+
+source /home/ascds/.ascrc -r release
+setenv PYTHONPATH "/data/mta/Script/Python3.9/lib/python3.9/site-packages/"
 
 
 ++++++++

@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #####################################################################################
 #                                                                                   #
@@ -6,7 +6,7 @@
 #                                                                                   #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                   #
-#           last update: Jul 31, 2019                                               #
+#           last update: Jan 26, 2021                                               #
 #                                                                                   #
 #####################################################################################
 
@@ -27,10 +27,6 @@ from pylab import *
 import matplotlib.pyplot       as plt
 import matplotlib.font_manager as font_manager
 import matplotlib.lines        as lines
-
-import mpld3
-from mpld3 import plugins, utils
-
 #
 #--- reading directory list
 #
@@ -54,8 +50,6 @@ sys.path.append(mta_dir)
 #--- converTimeFormat contains MTA time conversion routines
 #
 import mta_common_functions as mcf
-import find_moving_average  as fmv
-import robust_linear        as robust
 
 hrci_offset = [[0,0], [2,0], [0,2], [-2,0], [0,-2], [2,2], [-2,2], [-2,-2],\
                [2,-2], [4,0], [0,4],[-4,0], [0,-4], [6,0], [0,6], [-6,0],\
@@ -167,13 +161,16 @@ def read_file(infile, inst, col):
 #
 #--- find where to put the data; 0 to 20 data slots
 #
-        yoffset = round(float(atemp[10]))
-        zoffset = round(float(atemp[11]))
+        yoffset = int(round(float(atemp[10])))
+        zoffset = int(round(float(atemp[11])))
+        pos     = -1
         for k in range(0, 21):
             if offset_list[k][0] == yoffset and  offset_list[k][1] == zoffset:
                 pos = k
                 break
-    
+        if pos < 0:
+            continue
+
         avg    = float(atemp[12])
         err    = float(atemp[13])
         crate  = float(atemp[15])
@@ -258,7 +255,7 @@ def plot_panel(xmin, xmax, ymin, ymax, xdata, ydata, yerr, ydata2, yerr2, xname,
     resolution = 100.0
     connect = 0
 #
-#--- fit line --- use robust method
+#--- fit line
 #
     xx = []
     for m in range(0, len(xdata)):

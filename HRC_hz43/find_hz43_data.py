@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                           #
 #                                                                               #
-#           Last Update: Jul 16, 2019                                           #
+#           Last Update: Jan 14, 2021                                           #
 #                                                                               #
 #################################################################################
 
@@ -17,6 +17,7 @@ import re
 import math
 import time
 import random
+import numpy
 #
 #--- reading directory list
 #
@@ -78,6 +79,7 @@ def extract_calb_hz43():
         mc3  = re.search('archived',  ent)
         mc4  = re.search('HRC-I',     ent)
         mc5  = re.search('HRC-S',     ent)
+
         if (mc1 is not None) or (mc1a is not None) or (mc1b is not None):
             if mc2 is not None:
                 if mc3 is not None:
@@ -91,21 +93,16 @@ def extract_calb_hz43():
 #
 #--- check whether there are any new hz43 calibration data
 #
-    hrc_i_p = set(hrc_i_p)
-    hrc_s_p = set(hrc_s_p)
-    hrc_i = set(hrc_i)
-    hrc_s = set(hrc_s)
-    idiff = []
-    sdiff = []
-    new   = [idiff, sdiff]
-    chk = 0
-    if hrc_i != hrc_i_p:
-        if len(hrc_i) > len(hrc_i_p):
-            idiff = list(hrc_i - hrc_i_p)
-
-    if hrc_s != hrc_s_p:
-        if len(hrc_s) > len(hrc_s_p):
-            sdiff = list(hrc_s - hrc_s_p)
+    hrc_i_p = list(set(hrc_i_p))
+    hrc_s_p = list(set(hrc_s_p))
+    hrc_i   = list(set(hrc_i))
+    hrc_s   = list(set(hrc_s))
+    idiff   = []
+    sdiff   = []
+    new     = [idiff, sdiff]
+    chk     = 0
+    idiff   = numpy.setdiff1d(hrc_i, hrc_i_p)
+    sdiff   = numpy.setdiff1d(hrc_s, hrc_s_p)
 
     if (len(idiff) > 0) or (len(sdiff) > 0):
         chk = 1

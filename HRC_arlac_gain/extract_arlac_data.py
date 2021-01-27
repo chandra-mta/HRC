@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #   author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                               #
-#   Last Update: Jul 22, 2019                                                   #
+#   Last Update: Jan 26, 2021                                                   #
 #                                                                               #
 #################################################################################
 
@@ -14,13 +14,9 @@ import sys
 import os
 import string
 import re
-import math
-import unittest
 import time
 import random
 import numpy
-import astropy.io.fits  as pyfits
-from datetime import datetime
 #
 #--- reading directory list
 #
@@ -73,10 +69,10 @@ def extract_calb_arlac():
     hrc_i = []
     hrc_s = []
     for ent in data:
-        mc1  = re.search('ARLAC', ent)
-        mc1a = re.search('ArLac', ent)
-        mc1b = re.search('AR LAC',ent)
-        mc2  = re.search('CAL',   ent)
+        mc1  = re.search('ARLAC', ent, re.IGNORECASE)
+        mc1a = re.search('ArLac', ent, re.IGNORECASE)
+        mc1b = re.search('AR LAC',ent, re.IGNORECASE)
+        mc2  = re.search('CAL',   ent, re.IGNORECASE)
         mc3  = re.search('archived',  ent)
         if (mc1 is not None) or (mc1a is not None) or (mc1b is not None):
             if mc2 is not None:
@@ -93,15 +89,15 @@ def extract_calb_arlac():
 #
 #--- check whether there are any new arlac calibration data
 #
-    hrc_past = set(hrc_past)
-    hrc_i    = set(hrc_i)
-    hrc_s    = set(hrc_s)
+    hrc_past = list(set(hrc_past))
+    hrc_i    = list(set(hrc_i))
+    hrc_s    = list(set(hrc_s))
     idiff = []
     sdiff = []
     new   = [idiff, sdiff]
     chk   = 0
-    idiff = list(hrc_i - hrc_past)
-    sdiff = list(hrc_s - hrc_past)
+    idiff = list(numpy.setdiff1d(hrc_i, hrc_past))
+    sdiff = list(numpy.setdiff1d(hrc_s, hrc_past))
     
     if (len(idiff) > 0) or (len(sdiff) > 0):
         chk = 1

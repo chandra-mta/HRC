@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #   author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                               #
-#   Last Update: Jul 22, 2019                                                   #
+#   Last Update: Jan 26, 2021                                                   #
 #                                                                               #
 #################################################################################
 
@@ -15,20 +15,8 @@ import os
 import string
 import re
 import math
-import unittest
 import time
 import random
-import numpy
-import astropy.io.fits  as pyfits
-from datetime import datetime
-#
-#--- from ska
-#
-from Ska.Shell import getenv, bash
-
-ascdsenv = getenv('source /home/ascds/.ascrc -r release; \
-                   source /home/mta/bin/reset_param ', shell='tcsh')
-ciaoenv  = getenv('source /soft/ciao/bin/ciao.sh')
 #
 #--- reading directory list
 #
@@ -82,10 +70,10 @@ def extract_calb_arlac():
     hrc_i = []
     hrc_s = []
     for ent in data:
-        mc1  = re.search('ARLAC', ent)
-        mc1a = re.search('ArLac', ent)
-        mc1b = re.search('AR LAC',ent)
-        mc2  = re.search('CAL',   ent)
+        mc1  = re.search('ARLAC', ent, re.IGNORECASE)
+        mc1a = re.search('ArLac', ent, re.IGNORECASE)
+        mc1b = re.search('AR LAC',ent, re.IGNORECASE)
+        mc2  = re.search('CAL',   ent, re.IGNORECASE)
         mc3  = re.search('archived',  ent)
         if (mc1 is not None) or (mc1a is not None) or (mc1b is not None):
             if mc2 is not None:

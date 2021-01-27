@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Jul 15, 2019                                                           #
+#           Last Update: Jan 27, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -18,7 +18,6 @@ import math
 import unittest
 import time
 import random
-import numpy
 import astropy.io.fits  as pyfits
 from datetime import datetime
 #

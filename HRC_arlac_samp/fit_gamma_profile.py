@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #################################################################################
 #                                                                               #
@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe(tisobe@cfa.harvard.edu)                            #
 #                                                                               #
-#           Last Update:    Jul 31, 2019                                        #
+#           Last Update:    Jan 26, 2021                                        #
 #                                                                               #
 #################################################################################
 
@@ -18,17 +18,17 @@ import operator
 import math
 import numpy
 import scipy
-import scipy.stats      as stats 
-
-from pylab import *
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as font_manager
-import matplotlib.lines as lines
+from scipy.optimize import curve_fit
 
 import matplotlib as mpl
 
 if __name__ == '__main__':
         mpl.use('Agg')
+
+from pylab import *
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as font_manager
+import matplotlib.lines as lines
 #
 #--- reading directory list
 #
@@ -51,7 +51,7 @@ sys.path.append(mta_dir)
 #--- import several functions
 #
 import mta_common_functions as mcf    #---- contains other functions commonly used in MTA scripts
-from kapteyn import kmpfit
+
 #
 #--- gamma fitting occasionally issue warning; ignore it
 #
@@ -213,7 +213,6 @@ def gamma_fit(x, y, a0, b0, m0):
                 y   --- dependent var
     Output: [a, b]
     """
-
     N = len(y)
     x   = numpy.array(x)
     y   = numpy.array(y)
@@ -228,12 +227,11 @@ def gamma_fit(x, y, a0, b0, m0):
 #--- fit the model
 #
     try:
-        fitter = kmpfit.Fitter(residuals=residualsG, data=(x,y,err))
-        fitter.fit(params0=p0)
+        popt, pcov = curve_fit(gfunction, x, y, p0=p0)
     
-        a, b, h = fitter.params
+        [a, b, h] = list(popt)
     except:
-        a, b, h = p0
+        [a, b, h] = p0
 
     return [a, b, h]
 

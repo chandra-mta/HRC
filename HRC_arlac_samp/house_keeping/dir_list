@@ -3,7 +3,7 @@
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Scripts3/house_keeping/'   :house_keeping
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Data3/'                    :data_dir
 '/data/aschrc6/wilton/isobe/Project8/ArLac/Exc3/'                     :exc_dir
-'/proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/ArLac/'        :web_dir
-'/data/mta/Script/Python3.6/MTA/'                                     :mta_dir
-'/data/aschrc6/wilton/isobe/Project8/Scripts/'                        :hrc_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_trendings/ArLac/'            :web_dir
+'/data/mta/Script/Python3.9/MTA/'                                     :mta_dir
+'/data/aschrc6/wilton/isobe/Project8/Scripts3.9/'                     :hrc_dir
 'http#//cxc.cfa.harvard.edu/contrib/cxchrc/HRC_trendings/ArLac/'      :html_top

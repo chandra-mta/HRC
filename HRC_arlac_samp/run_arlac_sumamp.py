@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #####################################################################################
 #                                                                                   #
@@ -6,7 +6,7 @@
 #                                                                                   #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                   #
-#           Last Update: Sep 06, 2019                                               #
+#           Last Update: Jan 26, 2021                                               #
 #                                                                                   #
 #####################################################################################
 
@@ -14,19 +14,7 @@ import sys
 import os
 import string
 import re
-import math
 import time
-
-import matplotlib as mpl
-
-if __name__ == '__main__':
-    mpl.use('Agg')
-
-from pylab import *
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as font_manager
-import matplotlib.lines as lines
-
 #
 #--- reading directory list
 #
@@ -89,7 +77,7 @@ def run_arlac_sumamp():
         cpp.run_for_all_profile_plot()      #--- fit gamma profile on the data and creat a plot
         chp.create_html_page('')            #--- update Ar Lac SumAmp page
 
-        cmd = 'chgrp -R mtagroup /proj/web-cxc-dmz/htdocs/contrib/cxchrc/HRC_trendings/ArLac/*'
+        cmd = 'chgrp -R mtagroup /proj/web-cxc/htdocs/contrib/cxchrc/HRC_trendings/ArLac/*'
         os.system(cmd)
         cmd = 'chgrp -R mtagroup /data/aschrc6/wilton/isobe/Project8/ArLac/Data3/*'
         os.system(cmd)
@@ -141,10 +129,10 @@ def find_new_arlac_observations(ret='0', nk=1):
     hrc_i = []
     hrc_s = []
     for ent in data:
-        mc1  = re.search('ARLAC',     ent)
-        mc1a = re.search('ArLac',     ent)
-        mc1b = re.search('AR LAC',    ent)
-        mc2  = re.search('CAL',       ent)
+        mc1  = re.search('ARLAC',     ent, re.IGNORECASE)
+        mc1a = re.search('ArLac',     ent, re.IGNORECASE)
+        mc1b = re.search('AR LAC',    ent, re.IGNORECASE)
+        mc2  = re.search('CAL',       ent, re.IGNORECASE)
         mc3  = re.search('archived',  ent)
         if (mc1 is not None) or (mc1a is not None) or (mc1b is not None):
             if mc2 is not None:
@@ -224,7 +212,7 @@ def send_notification():
         fo.write(text)
     
     cmd = 'cat ' + zspace + ' |mailx -s "Subject: New AR Lac Observation" vkashyap@cfa.harvard.edu'
-    os.system(cmd)
+    ###os.system(cmd)
     cmd = 'cat ' + zspace + ' |mailx -s "Subject: New AR Lac Observation" ' + admin
     os.system(cmd)
     

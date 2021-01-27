@@ -1,7 +1,9 @@
 
-setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
-
 cd /data/aschrc6/wilton/isobe/Project8/Vega/Exc/
+
+source /home/ascds/.ascrc -r release
+
+setenv PYTHONPATH "/data/mta/Script/Python3.9/lib/python3.9/site-packages/"
 
 /data/aschrc6/wilton/isobe/Project8/Vega/Scripts/compute_vega_count.py
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.9/bin/python3
 
 #####################################################################################################
 #                                                                                                   #
@@ -6,7 +6,7 @@
 #                                                                                                   #
 #           author: t. isobe(tisobe@cfa.harvard.edu)                                                #
 #                                                                                                   #
-#           Last Update:    Jan 12, 2021                                                            #
+#           Last Update:    Jan 26, 2021                                                            #
 #                                                                                                   #
 #####################################################################################################
 
@@ -40,10 +40,12 @@ for ent in data:
 #
 sys.path.append(bin_dir)
 sys.path.append(mta_dir)
+sys.path.append(hrc_common)
 #
 #--- import several functions
 #
 import mta_common_functions  as mcf    #---- contains other functions commonly used in MTA scripts
+import hrc_common_functions  as hcf    
 import fit_voigt_profile     as voigt
 import adjust_arlac_position as aap
 #
@@ -84,8 +86,12 @@ def  hrc_gain_fit_voigt(candidate_list):
 
             print(str(obsid))
 
-            hfile = extract_hrc_evt2(obsid)
+            #hfile = extract_hrc_evt2(obsid)
+            hfile = hcf.run_arc5gl(0, 0, obsid, level='2', filetype='evt2')
             if hfile == 'na':
+                sfile = house_keeping +'skip_obsids'
+                with open(sfile, 'a') as fo:
+                    fo.write(str(obsid) + '\n')
                 continue
 #
 #--- get a file name header for the later use
@@ -120,6 +126,9 @@ def  hrc_gain_fit_voigt(candidate_list):
             try:
                 [x, y] = find_center(hfile)
             except:
+                sfile = house_keeping +'skip_obsids'
+                with open(sfile, 'a') as fo:
+                    fo.write(str(obsid) + '\n')
                 continue
 #
 #--- extract pha values in the given area
@@ -128,7 +137,7 @@ def  hrc_gain_fit_voigt(candidate_list):
 
 #--- create pha count distribution
 #
-            pmax = max(pha) + 1
+            pmax     = max(pha) + 1
             pha_bin  = [x for x in range(0, pmax)]
             pha_hist = [0 for x in range(0, pmax)]
 
@@ -203,6 +212,10 @@ def  hrc_gain_fit_voigt(candidate_list):
         with open(outfile, 'a') as fo:
             fo.write(save_line)
 
+        return True
+    else:
+        return False
+
 #---------------------------------------------------------------------------------------------------
 #-- find_med: find median point of pha postion                                                   ---
 #---------------------------------------------------------------------------------------------------
@@ -252,11 +265,16 @@ def extract_hrc_evt2(obsid):
     with  open(zspace, 'w') as fo:
         fo.write(line)
 
-    cmd =  ' /proj/sot/ska/bin/arc5gl  -user isobe -script ' + zspace + ' > fits_list'
+    print("I AM HERE LINE: " + line)
 #
 #--- run arc5gl
 #
-    os.system(cmd)
+    try:
+        cmd =  ' /proj/sot/ska/bin/arc5gl    -user isobe -script ' + zspace + ' > fits_list'
+        os.system(cmd)
+    except:
+        cmd  = ' /proj/axaf/simul/bin/arc5gl -user isobe -script ' + zspace + ' > fits_list'
+        os.system(cmd)
     mcf.rm_files(zspace)
 #
 #--- check the data is actually extracted
@@ -305,16 +323,17 @@ def find_center(ifile):
         xstart = xstep * i + xmin
         xstop  = xstart + xstep
         for j in range (0, 8):
-            ystart = ystep * j + ymin
-            ystop  = ystart + ystep
+            ystart  = ystep * j + ymin
+            ystop   = ystart + ystep
 
-            mask = (data.field('X') >= xstart) & (data.field('X') < xstop) & (data.field('Y') \
+            mask    = (data.field('X') >= xstart) & (data.field('X') < xstop) & (data.field('Y') \
                             >= ystart) & (data.field('Y') < ystop)
-            temp = data[mask]
+            temp    = data[mask]
             chipx_p = temp.field('X')
             chipy_p = temp.field('Y')
+
             if len(chipx_p) > cmax:
-                cmax = len(chipx_p)
+                cmax  = len(chipx_p)
                 cposx = i
                 cposy = j
 #
@@ -323,17 +342,17 @@ def find_center(ifile):
     xpos_list = []
     ypos_list = []
     maxv_list = []
-    xstart = xstep * cposx + xmin
-    xstop  = xstart + xstep
+    xstart    = xstep  * cposx + xmin
+    xstop     = xstart + xstep
 
-    ystart = ystep * cposy + ymin
-    ystop  = ystart + ystep
+    ystart    = ystep  * cposy + ymin
+    ystop     = ystart + ystep
 
-    mask = (data.field('X') >= xstart) & (data.field('X') < xstop) & (data.field('Y') \
+    mask      = (data.field('X') >= xstart) & (data.field('X') < xstop) & (data.field('Y') \
                             >= ystart) & (data.field('Y') < ystop)
-    temp = data[mask]
-    chipx_p = temp.field('X')
-    chipy_p = temp.field('Y')
+    temp      = data[mask]
+    chipx_p   = temp.field('X')
+    chipy_p   = temp.field('Y')
 #
 #--- count up the events. bin to 2x2 so that we get enough count in each bin
 #
@@ -359,8 +378,8 @@ def find_center(ifile):
         for n in range(0, ydim):
             if cbin[m][n] > vmax:
                 vmax = cbin[m][n]
-                xx = m
-                yy = n
+                xx   = m
+                yy   = n
 #
 #--- take the mddle of the bin as the brightest spot
 #
