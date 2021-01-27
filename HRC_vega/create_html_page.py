@@ -79,8 +79,8 @@ def create_html_and_plot():
     except:
         pass
 
-#    if chk == 0:
-#        exit(1)
+    if chk == 0:
+        exit(1)
 #
 #--- read html page template
 #
