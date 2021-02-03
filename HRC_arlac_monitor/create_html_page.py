@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                           #
 #                                                                               #
-#           Last Update: Jan 21, 2021                                           #
+#           Last Update: Feb 03, 2021                                           #
 #                                                                               #
 #################################################################################
 
@@ -43,8 +43,10 @@ for ent in data:
 #
 sys.path.append(mta_dir)
 sys.path.append(bin_dir)
+sys.path.append(hrc_common)
 
 import mta_common_functions     as mcf
+import hrc_common_functions     as hcf
 #
 #--- temp writing file name
 #
@@ -165,7 +167,7 @@ def plot_data(data, outname, pos):
     ta   = time.localtime()
     xmax = ta.tm_year + 1
     ymin = 0.0
-    ymax = 10
+    ymax = 6
 #
 #--- start plotting
 #
