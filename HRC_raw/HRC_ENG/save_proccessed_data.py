@@ -6,7 +6,7 @@
 #                                                                                       #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                       #
-#           Last Update: Aug 07, 2019                                                   #
+#           Last Update: Feb 08, 2021                                                   #
 #                                                                                       #
 #########################################################################################
 
@@ -86,30 +86,35 @@ def move_files():
             mon = 12
             year -= 1
 
-        top1y = top1 + str(year) + '/'
-        if  not os.path.isdir(top1y):
-            cmd = 'mkdir -p ' + top1y
+        top1ye = top1 + str(year) + '/Eng0/'
+        if  not os.path.isdir(top1ye):
+            cmd = 'mkdir -p ' + top1ye
             os.system(cmd)
 
-        top2y = top2 + str(year) + '/'
+        top1yr = top1 + str(year) + '/Rates/'
+        if  not os.path.isdir(top1yr):
+            cmd = 'mkdir -p ' + top1yr
+            os.system(cmd)
+
+        top2y = top2 + str(year) + '/HK0/'
         if  not os.path.isdir(top2y):
             cmd = 'mkdir -p ' + top2y
             os.system(cmd)
         
-        input_head  = top1 + 'hrc_rates_'
-        output_head = top1y + 'rates_'
+        input_head  = top1   + 'hrc_rates_'
+        output_head = top1yr + 'rates_'
         combine_rates_data(year, mon, input_head, output_head)
         
-        input_head  = top1 + 'hrc_4_eng0_'
-        output_head = top1y + 'eng0_4_'
+        input_head  = top1   + 'hrc_4_eng0_'
+        output_head = top1ye + 'eng0_4_'
         combine_rates_data(year, mon, input_head, output_head)
         
-        input_head  = top1 + 'hrc_5_eng0_'
-        output_head = top1y + 'eng0_5_'
+        input_head  = top1   + 'hrc_5_eng0_'
+        output_head = top1ye + 'eng0_5_'
         combine_rates_data(year, mon, input_head, output_head)
         
-        input_head  = top2 + 'hrc_hk0_'
-        output_head = top2y + 'hk0_'
+        input_head  = top2   + 'hrc_hk0_'
+        output_head = top2y  + 'hk0_'
         combine_rates_data(year, mon, input_head, output_head)
 
 #------------------------------------------
