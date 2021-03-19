@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.8/envs/ska3-shiny/bin/python
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Oct 29, 2020                                                           #
+#           Last Update: Mar 19, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -105,7 +105,7 @@ def run_process(obsid, hrc):
 
     mcf.rm_files(out_list)
 
-    hlst = [obsid,]
+    hlist = [obsid,]
     chk_proccess_status(inst, hlist)
 
 #-----------------------------------------------------------------------------------------

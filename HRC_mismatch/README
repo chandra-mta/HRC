@@ -67,7 +67,7 @@ input:
     pcad pcad8eng data from archieve
 
 output:
-    <exc_dir>/dither_cont       #--- a file contains mismatched case information
+    <exc_dir>/dither_cnt    --- error log to be used by send_email_out.py
 
 Note: since enable command can be issued multiple times without any effect, this script
       check dither enable command only when dither disable command issued. 
@@ -85,12 +85,12 @@ ouput:
     <record_dir>/email_<mm>_<dd>_<yyy>
 
 Environment
-setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
-
+setenv SKA /proj/sot/ska
+setenv PYTHONPATH "/data/mta/Script/Python3.8/envs/ska3-shiny/lib/python3.8/site-packages:/data/mta/Script/Python3.8/lib/python3.8/site-packages/"
 
 Cronjob:
 ++++++++
 as isobe on ascda3
-16 5 * * *   cd /data/aschrc6/wilton/isobe/Project2/Exc; /data/aschrc6/wilton/isobe/Project2/Script3.6/hrc_backstop_wrap_script >> /home/isobe/Logs/hrc_backstop_extract_log.cron 2>&1
+16 5 * * *   cd /data/aschrc6/wilton/isobe/Project2/Exc; /data/aschrc6/wilton/isobe/Project2/Script/hrc_backstop_wrap_script >> /home/isobe/Logs/hrc_backstop_extract_log.cron 2>&1
 
 

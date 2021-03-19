@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.8/envs/ska3-shiny/bin/python
 
 #################################################################################################
 #                                                                                               #
@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Jan 14, 2021                                                           #
+#           Last Update: Mar 19, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -547,6 +547,7 @@ def find_hrc_calib_obsid(inst):
 #--- create a list of already processed data
 #
     cmd = 'ls -d /data/hrc/' + str(inst) + '/6*  > '+ zspace
+    os.system(cmd)
     with open(zspace, 'r') as f:
         ftest = f.read()
     wrd = str(inst) + '/61'

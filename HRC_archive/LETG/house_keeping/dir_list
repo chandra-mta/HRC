@@ -1,0 +1,6 @@
+'/data/aschrc6/wilton/isobe/Project9/'                              :main_dir
+'/data/aschrc6/wilton/isobe/Project9/Scripts/LETG/'                :bin_dir
+'/data/aschrc6/wilton/isobe/Project9/Scripts/LETG/house_keeping/'  :house_keeping
+'/data/hrc/i/'                                                      :data_dir
+'/data/aschrc6/wilton/isobe/Project9/Exc/'                          :exc_dir
+'/data/mta/Script/Python3.8/MTA/'                                   :mta_dir

@@ -1,0 +1,21 @@
+<tr>
+    <th>&#160;</th><th>&#160;</th>
+    <th colspan=8>Monlthy</th>
+    <th colspan=8>Cumulative</th>
+</tr>
+
+<tr style="color:yellow">
+    <th>Year</th><th>Month</th>
+    <th>Mean</th><th>SD</th>
+    <th>Max</th><th>Max Position</th>
+    <th>68% Level</th>
+    <th>95% Level</th>
+    <th>99.7% Level</th>
+    <th>Map</th>
+    <th>Mean</th><th>SD</th>
+    <th>Max</th><th>Max Position</th>
+    <th>68% Level</th>
+    <th>95% Level</th>
+    <th>99.7% Level</th>
+    <th>Map</th>
+</tr>

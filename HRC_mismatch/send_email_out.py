@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.8/envs/ska3-shiny/bin/python
 
 #########################################################################################
 #                                                                                       #
@@ -6,7 +6,7 @@
 #                                                                                       #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                       #
-#           Last Update: Aug 14, 2019                                                   #
+#           Last Update: Mar 19, 2021                                                   #
 #                                                                                       #
 #########################################################################################
 
@@ -22,7 +22,7 @@ import random
 #
 #--- reading directory list
 #
-path = '/data/aschrc6/wilton/isobe/Project2/Script3.6/house_keeping/dir_list'
+path = '/data/aschrc6/wilton/isobe/Project2/Script/house_keeping/dir_list'
 with open(path, 'r') as f:
     data = [line.strip() for line in f.readlines()]
 
@@ -44,8 +44,8 @@ import mta_common_functions     as mcf
 rtail  = int(time.time() * random.random())
 zspace = '/tmp/zspace' + str(rtail)
 
-####email  = 'swolk@cfa.harvard.edu,msobolewska@cfa.harvard.edu,dpatnaude@cfa.harvard.edu,tisobe@cfa.harvard.edu'
-email = 'tisobe@cfa.harvard.edu'
+email  = 'swolk@cfa.harvard.edu,msobolewska@cfa.harvard.edu,dpatnaude@cfa.harvard.edu,tisobe@cfa.harvard.edu'
+###email = 'tisobe@cfa.harvard.edu'
 
 #-----------------------------------------------------------------------------------
 #-- sent_email_out: check any mismatches today and, if so, send out email         --
@@ -108,7 +108,7 @@ def sent_email_out():
 #
 #--- seond out email
 #
-        cmd = 'cat ' + zspace + '| mailx -s "Subject:TEST! TEST! HRC Command Mismatch" ' + email
+        cmd = 'cat ' + zspace + '| mailx -s "Subject: HRC Command Mismatch" ' + email
         os.system(cmd)
 
         mcf.rm_files(zspace)

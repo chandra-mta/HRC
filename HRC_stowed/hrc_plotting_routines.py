@@ -1,4 +1,4 @@
-#!/usr/bin/env /data/mta/Script/Python3.6/envs/ska3/bin/python
+#!/usr/bin/env /data/mta/Script/Python3.8/envs/ska3-shiny/bin/python
 
 #############################################################################################
 #                                                                                           #
@@ -6,7 +6,7 @@
 #                                                                                           #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                           #
-#               last update: Jan 06, 2021                                                   #
+#               last update: Mar 19, 2021                                                   #
 #                                                                                           #
 #############################################################################################
 
@@ -49,7 +49,6 @@ sys.path.append(bin_dir)
 #
 import mta_common_functions       as mcf    #---- contains other functions commonly used in MTA scripts
 import robust_linear              as robust #---- robust linear fit routine
-from kapteyn import kmpfit                  #---- least sq fitting routine 
 import hrc_stowed_common_function as hcf
 #
 #--- temp writing file name

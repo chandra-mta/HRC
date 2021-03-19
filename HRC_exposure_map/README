@@ -1,0 +1,110 @@
+
+##################
+HRC Exposure Maps
+##################
+
+This set of scripts creates HRC exposure maps.
+
+
+Scripts
+==========
+hrc_dose_wrap_script
+hrc_dose_main_script    ---- environment setting scripts
+
+hrc_dose_create_run.py
+----------------------
+The script to run all functions.
+    input:  year    --- year    
+            month   --- month
+            If they are not given, the script assign appropriate month and year
+    output: <data_dir>/Month/HRC<inst>_<mon>_<year>_<sec>.fits.gz
+            <data_dir>/Cumulative/HRC<inst>_08_1999_<mon>_<year>_<sec>.fits.gz
+            <img_dir>/Month/HRC<inst>_<mon>_<year>_<swec>.png
+            <img_dir>/Cumulative/HRC<inst>_08_1999_<mon>_<year>_<swec>.png
+            <stat_dir>/hrc<inst>_<sec>_<acc/dff>_out
+            <web_dir>/hrc_exposure_map.html
+            <web_dir>/Sub_html/hrc<inst>_<sec>.html
+            <web_dir>/Plots/HRC<inst>/hrc<inst>_<sec>.html
+            <web_dir>/Plots/HRC<inst>/hrc<inst>_<sec>.png
+            <web_dir>/Image/HRC<inst>/Month/HRC<inst>_<mon>_<year>_<sec>.html
+            <web_dir>/Image/HRC<inst>/Month/HRC<inst>_<mon>_<year>_<sec>.png
+            <web_dir>/Image/HRC<inst>/Cumulative/HRC<inst>_08_1999_<mon>_<year>_<sec>.html
+            <web_dir>/Image/HRC<inst>/Cumulative/HRC<inst>_08_1999_<mon>_<year>_<sec>.png
+
+
+hrc_dose_get_data.py
+---------------------
+Extract fits data and create image fits files
+    input:  year    --- year
+            month   --- month
+    output: <data_dir>/Month/HRC<inst>_<mon>_<year>_<sec>.fits.gz
+            <data_dir>/Cumulative/HRC<inst>_08_1999_<mon>_<year>_<sec>.fits.gz
+
+hrc_dose_create_image.py
+------------------------
+Create png images from image fits files. It is better to run manually with a screen acess. 
+    input:  year    --- year
+            month   --- month
+            manual  --- if > 0, ds9 is used to create image
+            chk     --- if > 0, cut will be applied for the data in manual mode case
+    output: <img_dir>/Month/HRC<inst>_<mon>_<year>_<swec>.png
+            <img_dir>/Cumulative/HRC<inst>_08_1999_<mon>_<year>_<swec>.png
+
+hrc_dose_stat_data.py
+---------------------
+extract statistics from the image fits files
+    input:  year    --- year
+            month   --- month
+    output: <stat_dir>/hrc<inst>_<sec>_<acc/dff>_out
+
+
+hrc_dose_plot_exposure_stat.py
+-------------------------------
+plot stat results
+    input:  none, but read from <stat_i_dir> and <stat_s_dir>
+    output: <plot_dir>/<INST>/hrc<inst>_<sec>.html
+            <plot_dir>/<INST>/hrc<inst>_<sec>.png
+
+hrc_dose_html_updates.py
+-------------------------
+update html pages
+    input:  year    --- year
+            month   --- month
+    output: <web_dir>/Sub_html/<inst>_<sec>.html
+
+
+Directory
+=========
+'/data/aschrc6/wilton/isobe/Project11/Scripts/house_keeping/'   :house_keeping
+'/data/aschrc6/wilton/isobe/Project11/Scripts/Scripts/'         :bin_dir
+'/data/hrc/i/Exposure_map/Data/'                                :data_i_dir
+'/data/hrc/i/Exposure_map/Image/'                               :img_i_dir
+'/data/hrc/i/Exposure_map/Stats/'                               :stat_i_dir
+'/data/hrc/s/Exposure_map/Data/'                                :data_s_dir
+'/data/hrc/s/Exposure_map/Image/'                               :img_s_dir
+'/data/hrc/s/Exposure_map/Stats/'                               :stat_s_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_Exposure/'             :web_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_Exposure/Image/HRCI/'  :web_img_i_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_Exposure/Image/HRCS/'  :web_img_s_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_Exposure/Plots/HRCS/'  :plt_s_dir
+'/proj/web-cxc/htdocs/contrib/cxchrc/HRC_Exposure/Plots/HRCI/'  :plt_i_dir
+'/data/mta/Script/Python3.8/MTA/'                               :mta_dir
+
+
+Html
+====
+https://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_Exposure/hrc_exposure_map.html
+/proj/web-cxc/htdocs/contrib/cxchrc/HRC_Exposure/
+
+
+Cron job
+========
+on ascda3 as isobe
+
+17 2 3 * * cd /data/aschrc6/wilton/isobe/Project11/Exc; /data/aschrc6/wilton/isobe/Project11/Scripts/hrc_dose_wrap_script > /data/aschrc6/wilton/isobe/Project11/Scripts/test.log 2>&1
+
+
+
+
+
+

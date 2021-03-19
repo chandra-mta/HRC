@@ -1,7 +1,7 @@
-'/data/aschrc6/wilton/isobe/Project2/Script3.6/'                : bin_dir
-'/data/aschrc6/wilton/isobe/Project2/'                          : main_dir
-'/data/aschrc6/wilton/isobe/Project2/Exc/'                      : exc_dir
-'/data/aschrc6/wilton/isobe/Project2/Script3.6/house_keeping/'  : house_keeping
-'/data/aschrc6/wilton/isobe/Project2/Data_test/'                : data_dir
-'/data/aschrc6/wilton/isobe/Project2/Records_test/'             : record_dir
-'/data/mta/Script/Python3.6/MTA/'                               : mta_dir
+'/data/aschrc6/wilton/isobe/Project2/Script/'               : bin_dir
+'/data/aschrc6/wilton/isobe/Project2/'                      : main_dir
+'/data/aschrc6/wilton/isobe/Project2/Exc/'                  : exc_dir
+'/data/aschrc6/wilton/isobe/Project2/Script/house_keeping/' : house_keeping
+'/data/aschrc6/wilton/isobe/Project2/Data/'                 : data_dir
+'/data/aschrc6/wilton/isobe/Project2/Records/'              : record_dir
+'/data/mta/Script/Python3.8/MTA/'                           : mta_dir

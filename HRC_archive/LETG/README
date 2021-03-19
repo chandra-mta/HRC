@@ -1,0 +1,36 @@
+
+########################################################################
+Extract a pha2.fits and other analyzed results for grating observation
+########################################################################
+
+Scripts:
+========
+
+reprocess_warp_script
+reprocess_main_script       #---- scripts to set environments
+
+reprocess_warp_script.py
+-------------------------
+
+find a letg observation and add a pha2.fits and tg directory to /data/hrc/<inst>/analysis/
+
+input:  /data/hrc/<inst>/secondary/* 
+
+output: /data/hrc/<inst>/analysis/*pha2.fits
+        /data/hrc/<inst>/analysis/tg/*
+
+Environment: 
+------------
+setenv PYTHONPATH "/data/mta/Script/Python3.8/envs/ska3-shiny/lib/python3.8/site-packages:/data/mta/Script/Python3.8/lib/python3.8/site-packages/"
+
+Inside of the python script, ciao environment is set:
+
+source /soft/ciao/bin/ciao.csh -o
+
+
+
+
+
+
+
+

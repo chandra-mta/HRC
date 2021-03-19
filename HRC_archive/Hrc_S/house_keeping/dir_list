@@ -4,4 +4,4 @@
 '/data/hrc/s/'                                                      :data_dir
 '/data/aschrc6/wilton/isobe/Project9/Exc/'                          :exc_dir
 '/proj/web-cxc-dmz/htdocs/contrib/cxchrc/Archive/'                  :html_dir
-'/data/mta/Script/Python3.6/MTA/'                                   :mta_dir
+'/data/mta/Script/Python3.8/MTA/'                                   :mta_dir

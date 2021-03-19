@@ -1,0 +1,17 @@
+
+
+sed -i "s/Project1\/Scripts/Project1\/Scripts3.6/g" *.py 
+
+sed -i "s/\/proj\/sot\/ska\/bin\/python/\/data\/mta\/Script\/Python3.6\/envs\/ska3\/bin\/python/g" *.py
+\/proj\/sot\/ska\/bin\/python
+\/data\/mta\/Script\/Python3.6\/envs\/ska3\/bin\/python
+
+
+
+
+
+
+#-----------------------------------
+
+sed -i "s/Project1\/Scripts3.6/Project1\/Scripts/g" *.py 
+

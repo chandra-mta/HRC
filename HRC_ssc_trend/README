@@ -29,12 +29,12 @@ Directories
 '/data/aschrc6/wilton/isobe/Project10/Data/'                    : data_dir
 '/data/aschrc6/wilton/isobe/Project10/Exc/'                     : exc_dir
 '/proj/web-cxc-dmz/htdocs/contrib/cxchrc/SSC_trend/'            : html_dir
-'/data/mta/Script/Python3.6/MTA/'                               : mta_dir
+'/data/mta/Script/Python3.8/MTA/'                               : mta_dir
 
 Envirnment Settings
 -------------------
-setenv PYTHONPATH "/data/mta/Script/Python3.6/envs/ska3/lib/python3.6/site-packages:/data/mta/Script/Python3.6/lib/python3.6/site-packages/"
-
+setenv SKA /proj/sot/ska
+setenv PYTHONPATH "/data/mta/Script/Python3.8/envs/ska3-shiny/lib/python3.8/site-packages:/data/mta/Script/Python3.8/lib/python3.8/site-packages/"
 
 Web Site
 --------

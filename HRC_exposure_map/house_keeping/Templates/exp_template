@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+        <link rel="stylesheet" type="text/css" href="http://asc.harvard.edu/mta/REPORTS/Template/mta.css" />
+        <style  type='text/css'>
+        table{border-style:solid;border-spacing:8px;border-width:2px;border-collapse:separate;text-align:center}
+        td{text-align:center;padding:8px}
+        a:link {color:#00CCFF;}
+        a:visited {color:yellow;}
+        span.nobr {white-space:nowrap;}
+        </style>
+	<title>Telemetered Photon Dose Trends</title>
+
+<script language="JavaScript">
+    function MyWindowOpener(imgname) {
+        msgWindow=open("","displayname","toolbar=no,directories=no,menubar=no,location=no,scrollbars=yes,status=no,width=1100,height=900,resize=yes");
+        msgWindow.document.close();
+        msgWindow.document.write("<html><head><title>CTI plot:   "+imgname+"</title></head>");
+        msgWindow.document.write("<body bgcolor='white'>");
+        msgWindow.document.write("<img src='./"+imgname+"' border=0 width=1000 height=800></body></html>");
+        msgWindow.focus();
+    }
+</script>
+
+
+
+
+
+</head>
+
+
+<body style="color:#FFFFFF;background-color:#000000">
+<h1 style='text-align:center;margin-left:auto;margin-right:auto'>
+Telemetered Photon Dose Trends
+</h1>
+
+<h2>ACIS</h2>
+
+<p>
+To monitor accumulative exposure effects on ACIS, we created
+cumulative exposure map once a month from all observations, including cariblations,
+using evt1 data of that month. This map is added on  all previous exposure
+maps, and then statistics of the total exposure map is computed.
+</p>
+
+<p>
+The table below lists links to trend plots of average, minimum, maximum, and 68%, 95%, and 99.7% 
+level of dose for ACIS I and ACIS S.  The plots on the left are the trends of exposure doses of each month,
+and the plots on rights are trends of cumulative exposure doses from the begining
+of the Chandra mission (each month exposure map is added on to the
+previous all exposure maps).
+</p>
+
+<p>
+The second table lists the links to data tables including a link to a fits file of the month and an
+image of the data.
+</p>
+
+<div style='width:30%;float:right'>
+<strong style='text-aligh:left'>I 3</strong>
+<br />
+<a href="javascript:MyWindowOpener('./Images/ACIS_07_1999_04_2014_i3.png')">
+<img src='./Images/ACIS_07_1999_#LATEST#_i3.png' style='width:100%'>
+</a>
+</div>
+
+<div style='padding-bottom:60px;padding-left:60px'>
+<table border=1 style='font-size:110%;'>
+<tr>
+<th colspan=4>Plots</th>
+</tr><tr>
+<th>ACIS I2</th>
+<th>ACIS I3</th>
+<th>ACIS S2</th>
+<th>ACIS S3</th>
+</tr><tr>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_2_n_0.png')"> Node 0 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_3_n_0.png')"> Node 0 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_2_n_0.png')"> Node 0 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_3_n_0.png')"> Node 0 </a> </td>
+</tr><tr>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_2_n_1.png')"> Node 1 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_3_n_1.png')"> Node 1 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_2_n_1.png')"> Node 1 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_3_n_1.png')"> Node 1 </a> </td>
+</tr><tr>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_2_n_2.png')"> Node 2 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_3_n_2.png')"> Node 2 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_2_n_2.png')"> Node 2 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_3_n_2.png')"> Node 2 </a> </td>
+</tr><tr>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_2_n_3.png')"> Node 3 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/i_3_n_3.png')"> Node 3 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_2_n_3.png')"> Node 3 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./Plots/s_3_n_3.png')"> Node 3 </a> </td>
+</tr><tr>
+</table>
+</div>
+
+
+<div style='width:30%;float:right'>
+<strong style='text-aligh:left'>S 3</strong>
+<br />
+<a href="javascript:MyWindowOpener('./Images/ACIS_07_1999_#LATEST#_s3.png')">
+<img src='./Images/ACIS_07_1999_04_2014_s3.png' style='width:100%'>
+</a>
+</div>
+<div style='padding-bottom:60px;padding-left:60px'>
+<table border=1 style='font-size:110%;'>
+<tr>
+<th colspan=4>Data</th>
+</tr><tr>
+<th>ACIS I2</th>
+<th>ACIS I3</th>
+<th>ACIS S2</th>
+<th>ACIS S3</th>
+</tr><tr>
+<td><a href=./Data/i_2_n_0.html>Node 0</a></td>
+<td><a href=./Data/i_3_n_0.html>Node 0</a></td>
+<td><a href=./Data/s_2_n_0.html>Node 0</a></td>
+<td><a href=./Data/s_3_n_0.html>Node 0</a></td>
+</tr><tr>
+<td><a href=./Data/i_2_n_1.html>Node 1</a></td>
+<td><a href=./Data/i_3_n_1.html>Node 1</a></td>
+<td><a href=./Data/s_2_n_1.html>Node 1</a></td>
+<td><a href=./Data/s_3_n_1.html>Node 1</a></td>
+</tr><tr>
+<td><a href=./Data/i_2_n_2.html>Node 2</a></td>
+<td><a href=./Data/i_3_n_2.html>Node 2</a></td>
+<td><a href=./Data/s_2_n_2.html>Node 2</a></td>
+<td><a href=./Data/s_3_n_2.html>Node 2</a></td>
+</tr><tr>
+<td><a href=./Data/i_2_n_3.html>Node 3</a></td>
+<td><a href=./Data/i_3_n_3.html>Node 3</a></td>
+<td><a href=./Data/s_2_n_3.html>Node 3</a></td>
+<td><a href=./Data/s_3_n_3.html>Node 3</a></td>
+</tr>
+</table>
+</div>
+
+<hr />
+
+<h2>HRC</h2>
+<p>
+To monitor accumulative exposure effects on HRC, we created
+cumulative exposure maps of HRC using evt1 data of each month. 
+</p>
+<p>
+Following steps are taken to get the results
+</p>
+<ul>
+<li> Level 1 Event files for a specified month are obtained from archive.</li>
+<li> All the extracted image data were merged to create a month long exposure map for the month.</li>
+</ul>
+
+<h2>HRC Exposure Maps --- Centeral Part ---</h2>
+
+<p>
+Following plots show trend of average, maximum, and 68%, 95%, and 99.7% level doses for HRC I and HRC S.
+The plots on the left are  thoese of each month, and the plots on the right are 
+cumulative exposure counts from the begining of the Chandra mission.
+</p>
+<p>
+The minimum trends are not included since the map has the grid area where has no counts at all, and
+it makes the minmum counts, even it is cumulative, always zero. 
+</p>
+
+<h3>HRC I</h3>
+<a href="javascript:MyWindowOpener('./Plots/hrci.png')">
+<img src = './Plots/hrci.png' style='width:48%;float:left'>
+</a>
+
+<div style='padding-bottom:200px;text-align:center'>
+<p style='text-align:center'>
+<a href='./Data/hrci.html' style='font-size:150%'><strong>HRC I Data</strong></a>
+</p>
+<a href="javascript:MyWindowOpener('./Images/HRCI_08_1999_04_2014.png')">
+<img src = './Images/HRCI_08_1999_04_2014.png' style='width:30%;padding-left:50px;padding-bottom:30px'>
+</a>
+</div>
+
+
+
+
+<h3>HRC S</h3>
+<a href="javascript:MyWindowOpener('./Plots/hrcs.png')">
+<img src = './Plots/hrcs.png' style='width:48%;float:left'>
+</a>
+<div style='padding-bottom:200px;text-align:center'>
+<p style='text-align:center'>
+<a href='./Data/hrcs.html' style='font-size:150%'><strong>HRC S Data</strong></a>
+</p>
+<a href="javascript:MyWindowOpener('./Images/HRCI_08_1999_#LATEST#.png')">
+<a href="javascript:MyWindowOpener('./Images/HRCS_08_1999_#LATEST#.png')">
+<img src = './Images/HRCS_08_1999_04_2014.png' style='width:30%;padding-left:60px;padding-bottom:30px'>
+</a>
+</div>
+
+
+<h2> HRC Exposre Maps --- Sectioned Entire HRC --- </h2>
+
+<br /><br />
+<div>
+<h3>HRC I</h3>
+<center>
+<img src="./Plots/Structures/hrci_structure.gif" style='width:30%'>
+</center>
+<h3>HRC S</h3>
+<center>
+<img src="./Plots/Structures/hrcs_structure.gif" style='width:65%'>
+</center>
+</div>
+
+
+
+
+<br><br>
+<h2>HRC I</h2>
+
+<table border=1 cellspacing=5 cellpadding=20>
+<tr>
+<th>Plot</th>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_0.png')"> Section 0 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_1.png')"> Section 1 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_2.png')"> Section 2 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_3.png')"> Section 3 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_4.png')"> Section 4 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_5.png')"> Section 5 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_6.png')"> Section 6 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_7.png')"> Section 7 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_8.png')"> Section 8 </a> </td>
+</tr><tr>
+<th>Data</th>
+<td><a href='./Data_HRC_Full/hrci_0.html'>Section 0</a></td>
+<td><a href='./Data_HRC_Full/hrci_1.html'>Section 1</a></td>
+<td><a href='./Data_HRC_Full/hrci_2.html'>Section 2</a></td>
+<td><a href='./Data_HRC_Full/hrci_3.html'>Section 3</a></td>
+<td><a href='./Data_HRC_Full/hrci_4.html'>Section 4</a></td>
+<td><a href='./Data_HRC_Full/hrci_5.html'>Section 5</a></td>
+<td><a href='./Data_HRC_Full/hrci_6.html'>Section 6</a></td>
+<td><a href='./Data_HRC_Full/hrci_7.html'>Section 7</a></td>
+<td><a href='./Data_HRC_Full/hrci_8.html'>Section 8</a></td>
+</tr>
+<tr>
+<th>Images</th>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_0.png')"> Section 0 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_1.png')"> Section 1 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_2.png')"> Section 2 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_3.png')"> Section 3 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_4.png')"> Section 4 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_5.png')"> Section 5 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_6.png')"> Section 6 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_7.png')"> Section 7 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCI_09_1999_#LATEST#_8.png')"> Section 8 </a> </td>
+</tr>
+</table>
+
+
+<br><br>
+
+<h2>HRC S</h2>
+
+<table border =1 cellspacing=5 cellpadding=20>
+<tr>
+<th>Plot</th>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrci_0.png')"> Section 0 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_1.png')"> Section 1 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_2.png')"> Section 2 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_3.png')"> Section 3 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_4.png')"> Section 4 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_5.png')"> Section 5 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_6.png')"> Section 6 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_7.png')"> Section 7 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_8.png')"> Section 8 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Plots/hrcs_9.png')"> Section 9 </a> </td>
+</tr><tr>
+<th>Data</th>
+<td><a href='./Data_HRC_Full/hrcs_0.html'>Section 0</a></td>
+<td><a href='./Data_HRC_Full/hrcs_1.html'>Section 1</a></td>
+<td><a href='./Data_HRC_Full/hrcs_2.html'>Section 2</a></td>
+<td><a href='./Data_HRC_Full/hrcs_3.html'>Section 3</a></td>
+<td><a href='./Data_HRC_Full/hrcs_4.html'>Section 4</a></td>
+<td><a href='./Data_HRC_Full/hrcs_5.html'>Section 5</a></td>
+<td><a href='./Data_HRC_Full/hrcs_6.html'>Section 6</a></td>
+<td><a href='./Data_HRC_Full/hrcs_7.html'>Section 7</a></td>
+<td><a href='./Data_HRC_Full/hrcs_8.html'>Section 8</a></td>
+<td><a href='./Data_HRC_Full/hrcs_9.html'>Section 9</a></td>
+</tr>
+<tr>
+<th>Images</th>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_0.png')"> Section 0 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_1.png')"> Section 1 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_2.png')"> Section 2 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_3.png')"> Section 3 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_4.png')"> Section 4 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_5.png')"> Section 5 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_6.png')"> Section 6 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_7.png')"> Section 7 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_8.png')"> Section 8 </a> </td>
+<td> <a href="javascript:MyWindowOpener('./HRC/Images/HRCS_09_1999_#LATEST#_9.png')"> Section 9 </a> </td>
+</tr>
+</table>
+
+<div style='padding-top:20px'>
+</div>
+
+<hr />
+
+<p style='padding-top:20px;'>
+Last Update: #DATE#
+<br /><br />
+If you have questions about this page, please contact:  <a href='mailto:tisobe@cfa.harvard.edu'>tisobe@cfa.harvard.edu</a>.
+</p>
+
+</body>
+</html>

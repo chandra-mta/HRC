@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style  type='text/css'>
+        body{background-color:#FFEBCD;}
+        table{border-style:solid;border-spacing:8px;border-width:2px;
+        border-collapse:separate;text-align:center}
+        td{text-align:center;padding:8px}
+        a:link {color:blue;}
+        a:visited {color:red;}
+        span.nobr {white-space:nowrap;}
+    </style>
+    <script language="JavaScript">
+        function MyWindowOpener(imgname) {
+        msgWindow=open("","displayname","toolbar=no,directories=no,menubar=no,location=no,scrollbars=yes,status=no,width=1100,height=1050,resize=yes");
+        msgWindow.document.close();
+        msgWindow.document.write("<html><head><title>CTI plot:   "+imgname+"</title></head>");
+        msgWindow.document.write("<body bgcolor='white'>");
+        msgWindow.document.write("<img src='./"+imgname+"' border=0 width=900 height=900></body></html>");
+        msgWindow.focus();
+        }
+    </script>
+
+    <title>HRC Telemetered Photon Dose Trends</title>
+</head>
+
+<body>
+<h2>
+HRC Exposure Map
+</h2>
+
+<p style='margin-left:30px; margn-right:30px;'>
+The tables below show the links to HRCI and HRCS exposure history and images.
+Both instruments are divided into multiple sections to prevent the process overload.
+</p>
+
+<p style='margin-left:30px; margn-right:30px;'>
+Each section is defined by the following "rawx/rawy" coordinates.
+</p>
+ 
+<pre style='margin-left:30px; margn-right:30px;'>
+HRC I Sections
+Section   0     1      2      3      4      5      6      7      8
+------------------------------------------------------------------
+X Start   1,    1,     1,  5462,  5462,  5462, 10924, 10924, 10924
+X End  5461, 5461 , 5461, 10923, 10923, 10923, 16385, 16385, 16385
+Y Start   1, 5462, 10924,     1,  5462, 10924,     1,  5562, 10942
+Y End  5461,10923, 16385,  5461, 10923, 16385,  5461, 10923, 16385
+
+HRC S Sections
+Section   0     1      2      3      4      5      6      7      8      9
+--------------------------------------------------------------------------
+X Start   0,    0,     0,     0,     0,     0,     0,     0,     0,     0
+X End  4095, 4095,  4095,  4095,  4095,  4095,  4095,  4095,  4095,  4095
+Y Start   1, 4916,  9832, 14748, 19664, 24580, 29496, 34412, 39328, 44244
+Y End  4915, 9831, 14747, 19663, 24579, 29495, 34411, 39327, 44243, 49159
+</pre>
+
+
+<p style='margin-left:30px; margn-right:30px;'>
+The plot links show plots of history of exposures. The left side shows the monthly exposure,
+and the right side shows the cumulative exposures. The top panels show the average
+count rate in cnt/pixel, the middle panels show the maximum count rate and the bottom
+panels show the count rate of the pixels at 68%, 95%, and 99.7% percentiles.
+The definitions are the same on both monthly and cumulative data.
+Since the maximum plot could contain anomalies, a 99.7% plot may represent the maximum
+trend more accurately.
+</p>
+
+<p style='margin-left:30px; margn-right:30px;'>
+The data table displays statistics in a table format and also links to the exposure
+images. By clicking the link "map," you can check the exposure map of that month.
+</p>
+
+<br /><br />
+<h3>HRC I</h3>
+<img src="./Image/hrci_fig.gif" style='width:31%;'>
+<a href="javascript:MyWindowOpener('./Plots/HRCI/hrci_4.png')">
+<img src="./Plots/HRCI/hrci_4.png" style='width:31%;'>
+</a>
+<a href="javascript:MyWindowOpener('./Image/HRCI/Cumulative/HRCI_08_1999_#LATEST#_4.png')">
+<img src="./Image/HRCI/Cumulative/HRCI_08_1999_#LATEST#_4.png" style='width:31%;'>
+</a>
+
+<br />
+<p style='text-align:right;'>
+(The plot and the image are those of the latest section 4.)
+</p>
+<br />
+<table border=1 cellspacing=5 cellpadding=20>
+    <tr>
+        <th>Plot</th>
+        <td><a href='./Plots/HRCI/hrci_0.html'>Section 0</a></td>
+        <td><a href='./Plots/HRCI/hrci_1.html'>Section 1</a></td>
+        <td><a href='./Plots/HRCI/hrci_2.html'>Section 2</a></td>
+        <td><a href='./Plots/HRCI/hrci_3.html'>Section 3</a></td>
+        <td><a href='./Plots/HRCI/hrci_4.html'>Section 4</a></td>
+        <td><a href='./Plots/HRCI/hrci_5.html'>Section 5</a></td>
+        <td><a href='./Plots/HRCI/hrci_6.html'>Section 6</a></td>
+        <td><a href='./Plots/HRCI/hrci_7.html'>Section 7</a></td>
+        <td><a href='./Plots/HRCI/hrci_8.html'>Section 8</a></td>
+    </tr><tr>
+    <th>Data</th>
+        <td><a href='./Sub_html/hrci_0.html'>Section 0</a></td>
+        <td><a href='./Sub_html/hrci_1.html'>Section 1</a></td>
+        <td><a href='./Sub_html/hrci_2.html'>Section 2</a></td>
+        <td><a href='./Sub_html/hrci_3.html'>Section 3</a></td>
+        <td><a href='./Sub_html/hrci_4.html'>Section 4</a></td>
+        <td><a href='./Sub_html/hrci_5.html'>Section 5</a></td>
+        <td><a href='./Sub_html/hrci_6.html'>Section 6</a></td>
+        <td><a href='./Sub_html/hrci_7.html'>Section 7</a></td>
+        <td><a href='./Sub_html/hrci_8.html'>Section 8</a></td>
+    </tr>
+</table>
+
+
+<h3>HRC S</h3>
+<div style='text-align:center;'>
+<img src="./Image/hrcs_fig.gif" style='width:65%;'>
+</div>
+<br />
+<div style='text-align:center;margin-left:auto;margin-right:auto;'>
+<a href="javascript:MyWindowOpener('./Plots/HRCS/hrcs_5.png')">
+<img src="./Plots/HRCS/hrcs_5.png" style='width:31%;'>
+</a>
+<a href="javascript:MyWindowOpener('./Image/HRCS/Cumulative/HRCS_08_1999_#LATEST#_5.png')">
+<img src="./Image/HRCS/Cumulative/HRCS_08_1999_#LATEST#_5.png" style='width:31%;'>
+</a>
+</div>
+<br />
+<p style='text-align:right;'>
+(The plot and the image are those of the latest section 5.)
+</p>
+<br />
+<table border =1 cellspacing=5 cellpadding=20>
+    <tr>
+        <th>Plot</th>
+        <td><a href='./Plots/HRCS/hrcs_0.html'>Section 0</a></td>
+        <td><a href='./Plots/HRCS/hrcs_1.html'>Section 1</a></td>
+        <td><a href='./Plots/HRCS/hrcs_2.html'>Section 2</a></td>
+        <td><a href='./Plots/HRCS/hrcs_3.html'>Section 3</a></td>
+        <td><a href='./Plots/HRCS/hrcs_4.html'>Section 4</a></td>
+        <td><a href='./Plots/HRCS/hrcs_5.html'>Section 5</a></td>
+        <td><a href='./Plots/HRCS/hrcs_6.html'>Section 6</a></td>
+        <td><a href='./Plots/HRCS/hrcs_7.html'>Section 7</a></td>
+        <td><a href='./Plots/HRCS/hrcs_8.html'>Section 8</a></td>
+        <td><a href='./Plots/HRCS/hrcs_9.html'>Section 9</a></td>
+    </tr><tr>
+        <th>Data</th>
+        <td><a href='./Sub_html/hrcs_0.html'>Section 0</a></td>
+        <td><a href='./Sub_html/hrcs_1.html'>Section 1</a></td>
+        <td><a href='./Sub_html/hrcs_2.html'>Section 2</a></td>
+        <td><a href='./Sub_html/hrcs_3.html'>Section 3</a></td>
+        <td><a href='./Sub_html/hrcs_4.html'>Section 4</a></td>
+        <td><a href='./Sub_html/hrcs_5.html'>Section 5</a></td>
+        <td><a href='./Sub_html/hrcs_6.html'>Section 6</a></td>
+        <td><a href='./Sub_html/hrcs_7.html'>Section 7</a></td>
+        <td><a href='./Sub_html/hrcs_8.html'>Section 8</a></td>
+        <td><a href='./Sub_html/hrcs_9.html'>Section 9</a></td>
+    </tr>
+</table>
+
+<hr />
+<p>
+Last Data Update: #UPDATE#
+</p>
+<p>
+<em>
+If you have any question, please contact 
+<a href="mailto:tisobe@cfa.harvard.edu">tisobe@cfa.harvard.edu</a>.
+</em>
+</p>
+
+
+</body>
+</html>
+

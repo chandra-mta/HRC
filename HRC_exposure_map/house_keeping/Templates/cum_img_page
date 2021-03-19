@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style  type='text/css'>
+    body{background-color:#FFEBCD;}
+    table{border-style:solid;border-spacing:8px;border-width:2px;
+    border-collapse:separate;text-align:center}
+    td{text-align:center;padding:8px}
+    a:link {color:blue;}
+    a:visited {color:red;}
+    span.nobr {white-space:nowrap;}
+</style>
+
+
+<title>HRC #INST# Section #SEC# Image</title>
+
+</head>
+
+<body>
+<h2>Cumulative HRC #INST# Section #SEC# (#YEAR# / #MONTH#)</h2>
+
+<div style='margin-left:auto;margin-right:auto;text-align:center;'>
+<img src='./HRC#INST#_08_1999_#LATEST#_#SEC#.png' style='width:90%;'>
+</div>
+
+<div style='padding-bottom:10px;'>
+</div>
+
+<b>
+#MONLINK# Cumulative Plot
+<br />
+#SECLINK#
+#TOLINK#
+<a href='#SUBLINK#'>Back to Data Page</a>
+<br />
+<a href='https://cxc.cfa.harvard.edu/contrib/cxchrc/HRC_Exposure/hrc_exposure_map.html'>
+Back to Main Pange</a>
+
+</b>
+
+</body>
+</html>

@@ -10,8 +10,7 @@
 '/proj/web-cxc/htdocs/contrib/cxchrc/Stowed_study/Plots/'                   :plot_dir
 '/proj/web-cxc/htdocs/contrib/cxchrc/Stowed_study/Maps/'                    :map_dir
 '/data/aschrc6/wilton/isobe/Project1/Scripts/house_keeping/'                :house_keeping
-'/data/mta/Script/Python3.6/MTA/'                                           :mta_dir
-'/data/aschrc6/wilton/isobe/Python_Scripts/house_keeping/Info_dir/'         :bindata_dir
+'/data/mta/Script/Python3.8/MTA/'                                           :mta_dir
 '/proj/web-cxc/htdocs/contrib/cxchrc/Stowed_study'                          :web_dir
 '/data/chandra_caldb/sdp/data/chandra/hrc/badpix/'                          :bad_pix_dir
 '/data/chandra_caldb/sdp/data/chandra/hrc/'                                 :calib_dir

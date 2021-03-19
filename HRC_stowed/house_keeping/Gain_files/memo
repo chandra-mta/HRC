@@ -1,7 +1,10 @@
 
-the files are from: /data/CALDB/sdp/data/chandra/hrc/gmap/
+the files are from:
+/data/chandra_caldb/ciao4.12/data/chandra/hrc/gmap
 
 
 Sampgain:
-/data/neo/TimeDependentGainMaps/I/Sumamps/ForCALDB/
+####/data/neo/TimeDependentGainMaps/I/Sumamps/ForCALDB/
+
+
 
