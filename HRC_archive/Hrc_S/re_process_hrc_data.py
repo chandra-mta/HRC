@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Mar 19, 2021                                                           #
+#           Last Update: Arp 02, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -128,6 +128,10 @@ def run_process(hrc):
             pass
 
         mcf.rm_files(out_list)
+#
+#--- correct data file name format
+#
+        correct_naming(obsid, inst)
 
     chk_proccess_status(inst, hlist)
 
@@ -667,6 +671,44 @@ def check_inst(obsid):
     mcf.rm_file(dfile)
 
     return inst
+
+#------------------------------------------------------------------------------------------------
+#-- correct_naming: check secondary and analysis directories and correct wrongly named fits and par file
+#------------------------------------------------------------------------------------------------
+
+def correct_naming(obsid, inst):
+    """
+    check secondary and analysis directories and correct wrongly named fits and par file
+    input:  obsid   --- obsid   
+            inst    --- instrument. either "i" or "s"
+    """
+    cobsid = str(int(float(obsid)))
+    if len(cobsid) == 5:
+        return 
+
+    lobsid = mcf.add_leading_zero(obsid, 5)
+    
+    for sdir in ['secondary', 'analysis', 'repro']:
+
+        cmd = 'ls /data/hrc/' + inst  + '/' + lobsid + '/' + sdir + '/hrcf* >' + zspace
+        os.system(cmd)
+
+        data = mcf.read_data_file(zspace, remove=1)
+        for ent in data:
+            atemp = re.split('\/', ent)
+            fname = atemp[-1]
+            mc = re.search(lobsid, fname)
+            if mc is not None:
+                continue
+            else:
+                atemp = re.split('hrcf', fname)
+                btemp = re.split('_',   atemp[1])
+                sobs  = btemp[0]
+                new   = fname.replace(sobs, lobsid)
+                full  = '/data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/' + new
+
+                cmd = 'mv ' + ent + ' ' + full
+                os.system(cmd)
 
 
 #------------------------------------------------------------------------------------------------

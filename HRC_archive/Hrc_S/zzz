@@ -1,7 +1,0 @@
-operation=retrieve
-dataset=flight
-level=1
-detector=hrc
-filetype=evt1
-obsid=62649
-go

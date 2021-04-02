@@ -6,7 +6,7 @@
 #                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                       #
-#               last update: Feb 25, 2021                                               #
+#               last update: Apr 01, 2021                                               #
 #                                                                                       #
 #########################################################################################
 
@@ -105,9 +105,9 @@ def extract_pha_file():
             except:
                 continue
 #
-#--- move pha2 file and tg directroy to the analysis directory
+#--- move pha2 file and tg directroy to the repro directory
 #
-            outdir = d_dir + '/analysis/'
+            outdir = d_dir + '/repro/'
             cmd  = 'mkdir -p ' + outdir     #--- just in a case analysis dir does not exist
             os.system(cmd)
             cmd  = 'mv -f '  + str(obsid) + '/new/*_pha2.fits* ' + outdir + '/.'
@@ -120,6 +120,10 @@ def extract_pha_file():
 #
             cmd  = 'rm -rf ./' + str(obsid)
             os.system(cmd)
+#
+#--- fix naming to 5 digit obsid
+#
+            correct_naming(obsid, ilist[k])
 #
 #--- send email
 #
@@ -267,6 +271,46 @@ def check_grating_from_header(hrc, obsid):
     flist.close()
 
     return grat
+
+
+#------------------------------------------------------------------------------------------------
+#-- correct_naming: check secondary and analysis directories and correct wrongly named fits and par file
+#------------------------------------------------------------------------------------------------
+
+def correct_naming(obsid, inst):
+    """
+    check secondary and analysis directories and correct wrongly named fits and par file
+    input:  obsid   --- obsid   
+            inst    --- instrument. either "i" or "s"
+    """
+    cobsid = str(int(float(obsid)))
+    if len(cobsid) == 5:
+        return 
+
+    lobsid = mcf.add_leading_zero(obsid, 5)
+    
+    for sdir in ['repro',]:
+
+        cmd = 'ls /data/hrc/' + inst  + '/' + lobsid + '/' + sdir + '/hrcf* >' + zspace
+        os.system(cmd)
+
+        data = mcf.read_data_file(zspace, remove=1)
+        for ent in data:
+            atemp = re.split('\/', ent)
+            fname = atemp[-1]
+            mc = re.search(lobsid, fname)
+            if mc is not None:
+                continue
+            else:
+                atemp = re.split('hrcf', fname)
+                btemp = re.split('_',   atemp[1])
+                sobs  = btemp[0]
+                new   = fname.replace(sobs, lobsid)
+                full  = '/data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/' + new
+
+                cmd = 'mv ' + ent + ' ' + full
+                os.system(cmd)
+
 
 #------------------------------------------------------------------------------------
 

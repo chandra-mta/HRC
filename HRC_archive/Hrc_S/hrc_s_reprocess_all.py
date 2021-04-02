@@ -2,7 +2,7 @@
 
 #################################################################################################
 #                                                                                               #
-#           re_process_hrc_data.py: a control script to run reprocess csh scripts               #
+#       hrc_s_reprocess_all.py: re-run all reporcess on existing data                           #
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
@@ -31,8 +31,8 @@ ciaoenv  = getenv('source /soft/ciao/bin/ciao.csh; \
 #
 #--- reading directory list
 #
-#path = '/data/aschrc6/wilton/isobe/Project9/Scripts/Hrc_S/house_keeping/dir_list'
-path = '/data/aschrc6/wilton/isobe/Project9/Scripts/Hrc_I/house_keeping/dir_list'
+path = '/data/aschrc6/wilton/isobe/Project9/Scripts/Hrc_S/house_keeping/dir_list'
+#path = '/data/aschrc6/wilton/isobe/Project9/Scripts/Hrc_I/house_keeping/dir_list'
 
 with open(path, 'r') as f:
     data = [line.strip() for line in f.readlines()]
@@ -79,18 +79,31 @@ def run_process(hrc):
         data_dir = '/data/hrc/s/'
         inst     = 's'
 #
-#--- find un process data 
+#--- make a list of obsids
 #
-    hlist = find_un_processed_data(inst)
+    cmd = 'ls -d ' + data_dir + '* > ' + zspace
+    os.system(cmd)
+    data = mcf.read_data_file(zspace, remove=1)
+    hlist = []
+    for ent in data:
+        atemp = re.split('\/', ent)
+        obsid = atemp[-1]
+        if mcf.is_neumeric(obsid):
+            hlist.append(obsid)
 
-    if hrc == 'hrc_i':
-        print("HRC I : " + str(hlist))
-    else:
-        print("HRC S : " + str(hlist))
-    
+
+
+#    if hrc == 'hrc_i':
+#        print("HRC I : " + str(hlist))
+#    else:
+#        print("HRC S : " + str(hlist))
+#    
     for obsid in hlist:
+        obsid = str(int(float(obsid)))
         with open(out_list, 'w') as fo:
             fo.write(str(obsid) + '\n')
+        cmd = 'rm -rf ' + data_dir + obsid + "analysis/*"
+        os.system(cmd)
 #
 #--- extract fits data needed for analysis
 #
@@ -120,20 +133,20 @@ def run_process(hrc):
                 chk  = mcf.add_leading_zero(obsid, 5)
                 odir = data_dir + '/' + str(chk)
                 if os.path.isdir(odir):
-                    cmd = 'mv ' + cdir + ' ' + data_dir + '/Duplicate/.'
+                    cmd = 'rm -rf ' + odir
+                    os.system(cmd)
+                    cmd = 'mv ' + cdir + ' ' + odir
+                    os.system(cmd)
                 else:
                     cmd = 'mv ' + cdir + ' ' + odir
-                os.system(cmd)
+                    os.system(cmd)
         except:
             pass
 
         mcf.rm_files(out_list)
-#
-#--- correct data file name format
-#
         correct_naming(obsid, inst)
 
-    chk_proccess_status(inst, hlist)
+    #chk_proccess_status(inst, hlist)
 
 #-----------------------------------------------------------------------------------------
 #-- find_un_processed_data: find hrc obsids which need to be reprocessed                --
@@ -188,11 +201,11 @@ def find_un_processed_data(inst):
     clean = []
     cdir  = '/data/hrc/' + str(inst) + '/'
     for obsid in uhrc:
-        chk =  mcf.add_leading_zero(obsid, 5)
-        chk = cdir + chk
-        if os.path.isdir(chk):
-            pass
-        else:
+#        chk =  mcf.add_leading_zero(obsid, 5)
+#        chk = cdir + chk
+#        if os.path.isdir(chk):
+#            pass
+#        else:
             clean.append(obsid)
 
     return clean
@@ -431,6 +444,9 @@ def extract_hrc_data(obsid, data_dir):
     cmd = 'mv primary secondary ' + hdir + '/.'
     os.system(cmd)
 
+    cmd = 'rm -rf ' + hdir + '/analysis/* ' 
+    os.system(cmd)
+
     return check_data_exist(hdir)
 
 #------------------------------------------------------------------------------------------------
@@ -547,77 +563,82 @@ def find_hrc_calib_obsid(inst):
     input:  inst    --- s: hrc-s or i: hrc-i
     output: a list of obsids
     """
+##
+##--- create a list of already processed data
+##
+#    cmd = 'ls -d /data/hrc/' + str(inst) + '/6*  > '+ zspace
+#    os.system(cmd)
+#    with open(zspace, 'r') as f:
+#        ftest = f.read()
+#    wrd = str(inst) + '/61'
+#    mc  = re.search(wrd, ftest)
+#    if mc is not None:
+#        cmd = 'ls -d /data/hrc/' + str(inst) + '/61* >' + zspace
+#        os.system(cmd)
 #
-#--- create a list of already processed data
+#    cmd = 'ls -d /data/hrc/' + str(inst) + '/62* >' + zspace
+#    os.system(cmd)
 #
-    cmd = 'ls -d /data/hrc/' + str(inst) + '/6*  > '+ zspace
-    os.system(cmd)
-    with open(zspace, 'r') as f:
-        ftest = f.read()
-    wrd = str(inst) + '/61'
-    mc  = re.search(wrd, ftest)
-    if mc is not None:
-        cmd = 'ls -d /data/hrc/' + str(inst) + '/61* >' + zspace
-        os.system(cmd)
+#    data = mcf.read_data_file(zspace, remove=1)
+#    prev_list = []
+#    for ent in data:
+#        atemp = re.split('\/', ent)
+#        prev_list.append(int(float(atemp[-1])))
+#
+##
+##--- find today's date and set checking range for the last 30 days
+##
+#    today = time.strftime('%Y:%j:%H:%M:%S', time.gmtime())
+#    today = int(Chandra.Time.DateTime(today).secs)
+#    start = today - 10 * 86400
+##
+##--- extract hrc obsid information
+##
+#    line = 'operation=browse\n'
+#    line = line + 'dataset=flight\n'
+#    line = line + 'level=1\n'
+#    line = line + 'detector=hrc\n'
+#    line = line + 'filetype=evt1\n'
+#    line = line + 'tstart=' + str(start) + '\n'
+#    line = line + 'tstop='  + str(today) + '\n'
+#    line = line + 'go\n'
+#
+#    with open('zline', 'w') as fo:
+#        fo.write(line)
+#
+#    cmd  = ' /proj/sot/ska/bin/arc5gl  -user isobe -script zline > ' + zspace
+#    os.system(cmd)
+#
+#    mcf.rm_files('./zline')
+#
+#    data = mcf.read_data_file(zspace, remove=1)
+##
+##--- select obsids with 61* and 62* starting
+##
+#    h_list = []
+#    for ent in data:
+#        mc = re.search('hrcf', ent)
+#        if mc is not None:
+#            atemp = re.split('hrcf', ent)
+#            btemp = re.split('_', atemp[1])
+#            obsid = int(float(btemp[0]))
+#            if obsid > 61000 and obsid < 63000:
+##
+##--- if it is already observed skip it
+##
+#                if obsid in prev_list:
+#                    continue
+##
+##--- check which instrument
+##
+#                chk = check_inst(obsid)
+#                if chk == inst:
+#                    h_list.append(obsid)
 
-    cmd = 'ls -d /data/hrc/' + str(inst) + '/62* >' + zspace
-    os.system(cmd)
 
-    data = mcf.read_data_file(zspace, remove=1)
-    prev_list = []
-    for ent in data:
-        atemp = re.split('\/', ent)
-        prev_list.append(int(float(atemp[-1])))
 
-#
-#--- find today's date and set checking range for the last 30 days
-#
-    today = time.strftime('%Y:%j:%H:%M:%S', time.gmtime())
-    today = int(Chandra.Time.DateTime(today).secs)
-    start = today - 10 * 86400
-#
-#--- extract hrc obsid information
-#
-    line = 'operation=browse\n'
-    line = line + 'dataset=flight\n'
-    line = line + 'level=1\n'
-    line = line + 'detector=hrc\n'
-    line = line + 'filetype=evt1\n'
-    line = line + 'tstart=' + str(start) + '\n'
-    line = line + 'tstop='  + str(today) + '\n'
-    line = line + 'go\n'
+    h_list = ['62410', '62423', '62435', '62437', '62439', '62441', '62443', '62635', '62637', '62649', '62973', '62997', '62422', '62426', '62436', '62438', '62440', '62442', '62446', '62636', '62638', '62796', '62991']
 
-    with open('zline', 'w') as fo:
-        fo.write(line)
-
-    cmd  = ' /proj/sot/ska/bin/arc5gl  -user isobe -script zline > ' + zspace
-    os.system(cmd)
-
-    mcf.rm_files('./zline')
-
-    data = mcf.read_data_file(zspace, remove=1)
-#
-#--- select obsids with 61* and 62* starting
-#
-    h_list = []
-    for ent in data:
-        mc = re.search('hrcf', ent)
-        if mc is not None:
-            atemp = re.split('hrcf', ent)
-            btemp = re.split('_', atemp[1])
-            obsid = int(float(btemp[0]))
-            if obsid > 61000 and obsid < 63000:
-#
-#--- if it is already observed skip it
-#
-                if obsid in prev_list:
-                    continue
-#
-#--- check which instrument
-#
-                chk = check_inst(obsid)
-                if chk == inst:
-                    h_list.append(obsid)
 
     return h_list
 
@@ -672,7 +693,6 @@ def check_inst(obsid):
 
     return inst
 
-
 #------------------------------------------------------------------------------------------------
 #-- correct_naming: check secondary and analysis directories and correct wrongly named fits and par file
 #------------------------------------------------------------------------------------------------
@@ -689,7 +709,7 @@ def correct_naming(obsid, inst):
 
     lobsid = mcf.add_leading_zero(obsid, 5)
     
-    for sdir in ['secondary', 'analysis', 'repro']:
+    for sdir in ['secondary', 'analysis']:
 
         cmd = 'ls /data/hrc/' + inst  + '/' + lobsid + '/' + sdir + '/hrcf* >' + zspace
         os.system(cmd)
@@ -719,6 +739,6 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         hrc = sys.argv[1].strip()
     else:
-        hrc = 'hrc_i'
+        hrc = 'hrc_s'
 
     run_process(hrc)
