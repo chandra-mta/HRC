@@ -6,7 +6,7 @@
 #                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                       #
-#               last update: Apr 01, 2021                                               #
+#               last update: Apr 08, 2021                                               #
 #                                                                                       #
 #########################################################################################
 
@@ -114,6 +114,13 @@ def extract_pha_file():
             os.system(cmd)
     
             cmd  = 'mv  -f ' + str(obsid) + '/new/tg '           + outdir + '/.'
+            os.system(cmd)
+#
+#--- change permission etc
+#
+            cmd = 'chmod -R 775 ' + outdir 
+            os.system(cmd)
+            cmd = 'chgrp -R hat ' + outdir 
             os.system(cmd)
 #
 #--- remove the copied data
@@ -310,6 +317,12 @@ def correct_naming(obsid, inst):
 
                 cmd = 'mv ' + ent + ' ' + full
                 os.system(cmd)
+#
+#--- compress fits files
+#
+    for sdir in ['repro']:
+        cmd = 'gzip /data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/*fits'
+        os.system(cmd)
 
 
 #------------------------------------------------------------------------------------

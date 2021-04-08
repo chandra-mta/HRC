@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Apr 02, 2021                                                           #
+#           Last Update: Apr 08, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -106,26 +106,28 @@ def run_process(hrc):
 
         try:
             run_ciao(cmd)
-            cdir = data_dir + '/' + str(obsid)
-            if os.path.isdir(cdir):
-                cmd = 'chgrp -R hat ' + cdir 
-                os.system(cmd)
-                cmd = 'chmod -R 775 ' + cdir 
-                os.system(cmd)
+        except:
+            pass
+
+        cdir = data_dir + '/' + str(obsid)
+        if os.path.isdir(cdir):
+            cmd = 'chgrp -R hat ' + cdir 
+            os.system(cmd)
+            cmd = 'chmod -R 775 ' + cdir 
+            os.system(cmd)
 #
 #--- directory name should be 5 digit
 #
-            test = int(float(obsid))
-            if test < 10000:
-                chk  = mcf.add_leading_zero(obsid, 5)
-                odir = data_dir + '/' + str(chk)
-                if os.path.isdir(odir):
-                    cmd = 'mv ' + cdir + ' ' + data_dir + '/Duplicate/.'
-                else:
-                    cmd = 'mv ' + cdir + ' ' + odir
+        test = int(float(obsid))
+        if test < 10000:
+            chk  = mcf.add_leading_zero(obsid, 5)
+            odir = data_dir + '/' + str(chk)
+            if os.path.isdir(odir):
+                cmd = 'mv ' + odir + ' ' + data_dir + '/Duplicate/.'
                 os.system(cmd)
-        except:
-            pass
+
+            cmd = 'mv ' + cdir + ' ' + odir
+            os.system(cmd)
 
         mcf.rm_files(out_list)
 #
@@ -710,6 +712,12 @@ def correct_naming(obsid, inst):
 
                 cmd = 'mv ' + ent + ' ' + full
                 os.system(cmd)
+#
+#--- compress fits files
+#
+    for sdir in ['primary', 'secondary', 'analysis', 'repro']:
+        cmd = 'gzip /data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/*fits'
+        os.system(cmd)
 
 
 #------------------------------------------------------------------------------------------------
