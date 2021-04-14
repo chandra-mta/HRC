@@ -6,7 +6,7 @@
 #                                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                           #
 #                                                                                               #
-#           Last Update: Arp 08, 2021                                                           #
+#           Last Update: Arp 14, 2021                                                           #
 #                                                                                               #
 #################################################################################################
 
@@ -717,7 +717,51 @@ def correct_naming(obsid, inst):
     for sdir in ['primary', 'secondary', 'analysis', 'repro']:
         cmd = 'gzip /data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/*fits'
         os.system(cmd)
+#
+#--- correct pcad.lst 
+#
+    correct_pacd_path(inst)
 
+#-----------------------------------------------------------------------------------------
+#-- correct_pacd_path: correcting pcad.lst data path to a full path                    ---
+#-----------------------------------------------------------------------------------------
+
+def correct_pacd_path(inst):
+    """
+    correcting pcad.lst data path to a full path
+    input:  inst    --- instrument either 'i' or 's'
+    output: corrected pcad.lst file
+    """
+    cmd = 'ls /data/hrc/' + inst + '/*/primary/pcad.lst > ' +  zspace
+    os.system(cmd)
+    data = mcf.read_data_file(zspace, remove=1)
+
+    for ifile in data:
+        out = mcf.read_data_file(ifile)
+        aline = ''
+        for line in out:
+            atemp = re.split('\/', line)
+            if len(atemp) > 2:
+                obsid = atemp[4]
+                nform = mcf.add_leading_zero(obsid, 5)
+                if obsid != nform:
+                    test = line
+                    line = line.replace(obsid, nform)
+     
+                    aline = aline + line + '\n'
+            else:
+                atemp = re.split('\/', ifile)
+                obsid = atemp[4]
+                ipath = '/data/hrc/' + inst + '/' + mcf.add_leading_zero(obsid, 5) + '/primary/'
+                line  = ipath + line + '\n'
+                aline = aline + line
+
+
+        if aline == '':
+            continue
+
+        with open(ifile, 'w') as fo:
+            fo.write(aline)
 
 #------------------------------------------------------------------------------------------------
 
@@ -729,3 +773,4 @@ if __name__ == '__main__':
         hrc = 'hrc_s'
 
     run_process(hrc)
+
