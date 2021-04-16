@@ -134,6 +134,16 @@ def run_process(hrc):
 #--- correct data file name format
 #
         correct_naming(obsid, inst)
+#
+#--- correct pcad.lst 
+#
+        correct_pacd_path(inst)
+#
+#--- compress fits files
+#
+        lobsid = mcf.add_leading_zero(obsid, 5)
+        cmd    = 'gzip /data/hrc/' + inst + '/' + lobsid + '/*/*fits'
+        os.system(cmd)
 
     chk_proccess_status(inst, hlist)
 
@@ -690,7 +700,7 @@ def correct_naming(obsid, inst):
 
     lobsid = mcf.add_leading_zero(obsid, 5)
     
-    for sdir in ['secondary', 'analysis', 'repro']:
+    for sdir in ['secondary', 'analysis']:
 
         cmd = 'ls /data/hrc/' + inst  + '/' + lobsid + '/' + sdir + '/hrcf* >' + zspace
         os.system(cmd)
@@ -711,28 +721,21 @@ def correct_naming(obsid, inst):
 
                 cmd = 'mv ' + ent + ' ' + full
                 os.system(cmd)
-#
-#--- compress fits files
-#
-    for sdir in ['primary', 'secondary', 'analysis', 'repro']:
-        cmd = 'gzip /data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/*fits'
-        os.system(cmd)
-#
-#--- correct pcad.lst 
-#
-    correct_pacd_path(inst)
 
 #-----------------------------------------------------------------------------------------
 #-- correct_pacd_path: correcting pcad.lst data path to a full path                    ---
 #-----------------------------------------------------------------------------------------
 
-def correct_pacd_path(inst):
+def correct_pacd_path(obsid, inst):
     """
     correcting pcad.lst data path to a full path
-    input:  inst    --- instrument either 'i' or 's'
+    input:  obsid   --- obisd
+            inst    --- instrument either 'i' or 's'
     output: corrected pcad.lst file
     """
-    cmd = 'ls /data/hrc/' + inst + '/*/primary/pcad.lst > ' +  zspace
+    lobsid = mcf.add_leading_zero(obsid, 5)
+
+    cmd = 'ls /data/hrc/' + inst + '/' + lobsid + '/primary/pcad.lst > ' +  zspace
     os.system(cmd)
     data = mcf.read_data_file(zspace, remove=1)
 

@@ -6,7 +6,7 @@
 #                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                               #
 #                                                                                       #
-#               last update: Apr 08, 2021                                               #
+#               last update: Apr 16, 2021                                               #
 #                                                                                       #
 #########################################################################################
 
@@ -64,8 +64,8 @@ def extract_pha_file():
     """
     create a pha2 file and a tg directory for LETG observation
     input:  none, but read from /data/hrc/<inst>
-    output: /data/hrc/<inst>/<obsid>/analysis/*pha2.fits
-            /data/hrc/<inst>/<obsid>/analysis/tg/*
+    output: /data/hrc/<inst>/<obsid>/repro/*pha2.fits
+            /data/hrc/<inst>/<obsid>/repro/tg/*
     """
 #
 #--- get obsid list; d_list = [hrci_list, hrcs_list]
@@ -175,7 +175,7 @@ def make_process_list():
 #
 #--- check whether the pha2 file already exists
 #
-            cmd   = 'ls ' + hdir + obsid + '/analysis/* > ' + zspace + ' 2>/dev/null'
+            cmd   = 'ls ' + hdir + obsid + '/repro/* > ' + zspace + ' 2>/dev/null'
             os.system(cmd)
             with open(zspace, 'r') as f:
                 ochk = f.read()
@@ -281,12 +281,12 @@ def check_grating_from_header(hrc, obsid):
 
 
 #------------------------------------------------------------------------------------------------
-#-- correct_naming: check secondary and analysis directories and correct wrongly named fits and par file
+#-- correct_naming: check repro directory and correct wrongly named fits and par file
 #------------------------------------------------------------------------------------------------
 
 def correct_naming(obsid, inst):
     """
-    check secondary and analysis directories and correct wrongly named fits and par file
+    check repro directory and correct wrongly named fits and par file
     input:  obsid   --- obsid   
             inst    --- instrument. either "i" or "s"
     """
@@ -296,33 +296,31 @@ def correct_naming(obsid, inst):
 
     lobsid = mcf.add_leading_zero(obsid, 5)
     
-    for sdir in ['repro',]:
 
-        cmd = 'ls /data/hrc/' + inst  + '/' + lobsid + '/' + sdir + '/hrcf* >' + zspace
-        os.system(cmd)
+    cmd = 'ls /data/hrc/' + inst  + '/' + lobsid + '/repro/hrcf* >' + zspace
+    os.system(cmd)
 
-        data = mcf.read_data_file(zspace, remove=1)
-        for ent in data:
-            atemp = re.split('\/', ent)
-            fname = atemp[-1]
-            mc = re.search(lobsid, fname)
-            if mc is not None:
-                continue
-            else:
-                atemp = re.split('hrcf', fname)
-                btemp = re.split('_',   atemp[1])
-                sobs  = btemp[0]
-                new   = fname.replace(sobs, lobsid)
-                full  = '/data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/' + new
+    data = mcf.read_data_file(zspace, remove=1)
+    for ent in data:
+        atemp = re.split('\/', ent)
+        fname = atemp[-1]
+        mc = re.search(lobsid, fname)
+        if mc is not None:
+            continue
+        else:
+            atemp = re.split('hrcf', fname)
+            btemp = re.split('_',   atemp[1])
+            sobs  = btemp[0]
+            new   = fname.replace(sobs, lobsid)
+            full  = '/data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/' + new
 
-                cmd = 'mv ' + ent + ' ' + full
-                os.system(cmd)
+            cmd = 'mv ' + ent + ' ' + full
+            os.system(cmd)
 #
 #--- compress fits files
 #
-    for sdir in ['repro']:
-        cmd = 'gzip /data/hrc/' + inst + '/' + lobsid + '/' + sdir + '/*fits'
-        os.system(cmd)
+    cmd = 'gzip /data/hrc/' + inst + '/' + lobsid + '/repro/*fits'
+    os.system(cmd)
 
 
 #------------------------------------------------------------------------------------
