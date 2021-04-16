@@ -103,6 +103,13 @@ def extract_pha_file():
                 cmd  = acmd + pcmd
                 bash(cmd,  env=ciaoenv)
             except:
+#
+#--- if failed, keep the obsid in the record
+#
+                ofile = house_keeping + 'no_repro_list'
+                with open(ofile, 'a') as fo:
+                    eline = mcf.add_leading_zero(obsid, 5) + '\n'
+                    fo.write(eline)
                 continue
 #
 #--- move pha2 file and tg directroy to the repro directory
@@ -158,6 +165,14 @@ def make_process_list():
 #
     [obs_list, dict_inst, dict_grat] = make_inst_dict()
     
+#
+#--- read failed repro obsid list
+#
+    ifile   = house_keeping + 'no_repro_list'
+    out     = mcf.read_data_file(ifile)
+    rfailed = []
+    for ent in out:
+        rfailed.append(ent)
 
     save = []
     for inst in ['i', 's']:
@@ -172,6 +187,12 @@ def make_process_list():
         for ent in out:
             atemp = re.split('\/', ent)
             obsid = atemp[-3]
+#
+#--- check whether this obsid was previously checked, but failed to get the data
+#
+            test  = mcf.add_leading_zero(obsid, 5)
+            if test in rfailed:
+                continue
 #
 #--- check whether the pha2 file already exists
 #
