@@ -6,7 +6,7 @@
 #                                                                               #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                           #
 #                                                                               #
-#           last update: Jan 21, 2021                                           #
+#           last update: May 25, 2021                                           #
 #                                                                               #
 #################################################################################
 
@@ -865,7 +865,7 @@ def make_html_page(fig, outname, col, inst, sign, step, profile_page):
 #
 #--- open a profile page
 #
-    hprofile = profile_page.replace("/proj/web-cxc-dmz/htdocs", "http://cxc.cfa.harvard.edu")
+    hprofile = profile_page.replace("/proj/web-cxc/htdocs", "http://cxc.cfa.harvard.edu")
     out = out + '<h3><a href="' + hprofile + '" style=\'color:blue;\'>Open Fitted Distribution Page</a></h3>\n\n'
 #
 #--- count plots
@@ -973,7 +973,7 @@ def make_profile_page(time_list, info_list, title, outname, backpage):
 
     out = out + '<h2>Distribution Page: ' + title + '</h2>\n'
 
-    hprofile = backpage.replace("/proj/web-cxc-dmz/htdocs", "http://cxc.cfa.harvard.edu")
+    hprofile = backpage.replace("/proj/web-cxc/htdocs", "http://cxc.cfa.harvard.edu")
 
     out = out + '<div style="text-align:right;padding-bottom:5px;">\n'
     out = out + '<h3><a href="' + hprofile + '" style=\'color:blue\'>Back to Previous Page</a></h3>\n'
