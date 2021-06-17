@@ -6,7 +6,7 @@
 #                                                                                       #
 #           author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                       #
-#           Last Update: Jan 27, 2021                                                   #
+#           Last Update: Jun 17, 2021                                                   #
 #                                                                                       #
 #########################################################################################
 
@@ -290,7 +290,10 @@ def line_fit(x, y, e):
     dlen = len(x)
 
     for k in range(0, dlen):
-        weight = 1.0 / e[k]**2
+        try:
+            weight = 1.0 / e[k]**2
+        except:
+            weight = 1.0
         suma  += weight
         sumx  += weight * x[k]
         sumy  += weight * y[k]
