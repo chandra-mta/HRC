@@ -6,7 +6,7 @@
 #                                                                                           #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                           #
-#               last update: Mar 19, 2021                                                   #
+#               last update: Oct 20, 2021                                                   #
 #                                                                                           #
 #############################################################################################
 
@@ -74,6 +74,10 @@ basetime = datetime.strptime('01/01/98,00:00:00', BTFMT)
 #
 Epoch    = time.localtime(0)
 Ebase_t  = time.mktime((1998, 1, 1, 0, 0, 0, 5, 1, 0))
+#
+#--- user name of arc5gl
+#
+arc_user = 'isobe'
 
 #-----------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------
@@ -793,6 +797,10 @@ def select_data_with_logical_mask(tbdata, col, mask):
 #
 #--- recreate data table
 #
+    try:
+        chk = len(save[0])
+    except:
+        return ''
     out = []
     for col in col_names:
         vdata = []
@@ -915,10 +923,10 @@ def run_arc5gl(operation, start='', stop='', dataset='flight', detector='hrc',\
         mline = mline + 'filename'+ str(filename) + '\n'
 
     mline = mline + 'go\n'
-    cmd0 = ' /proj/sot/ska/bin/arc5gl -user isobe -script ' + zspace
+    cmd0 = ' /proj/sot/ska/bin/arc5gl -user ' + arc_user + ' -script ' + zspace
 
     cmd1 = '/usr/bin/env PERL5LIB=""'
-    cmd2 = ' /proj/axaf/simul/bin/arc5gl -user isobe  -script ' + zspace
+    cmd2 = ' /proj/axaf/simul/bin/arc5gl -user ' + arc_user + '  -script ' + zspace
 #
 #--- set operation : browse/retrieve
 #
