@@ -7,7 +7,7 @@
 #                                                                                           #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                           #
-#               last update: Mar 21, 2021                                                   #
+#               last update: Oct 19, 2021                                                   #
 #                                                                                           #
 #############################################################################################
 
@@ -70,6 +70,9 @@ zspace = '/tmp/zspace' + str(rtail) + 'hrc'
 NULL      = 'null'
 
 inst_list = ['Hrc_i_115', 'Hrc_s_125_hi', 'Hrc_s_125']
+
+admin = 'lina.pulgarin-duque@cfa.harvard.edu'
+admin = 'tisobe@cfa.harvard.edu'
 
 #-----------------------------------------------------------------------------------------------
 #-- run_hrc_stowed_background_monthly_update: run monthly update for the hrc stowed background data 
@@ -224,7 +227,7 @@ def get_yearly_evt_count():
 #-- send_email: sending out mail                                                              --
 #-----------------------------------------------------------------------------------------------
 
-def send_email(message, header, email = 'tisobe@cfa.harvard.edu'):
+def send_email(message, header, email =admin):
     """
     sending out mail
     input:  message --- content of the mail

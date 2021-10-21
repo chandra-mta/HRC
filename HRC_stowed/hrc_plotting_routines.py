@@ -6,7 +6,7 @@
 #                                                                                           #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                           #
-#               last update: Mar 19, 2021                                                   #
+#               last update: Oct 21, 2021                                                   #
 #                                                                                           #
 #############################################################################################
 
@@ -361,7 +361,7 @@ def plot_pha_trend(sfile, indata, inst=1):
         ymin   = 30
         ymax   = 130
         #bpoint = 2010
-        bpoints = [2010, 2017]
+        bpoints = [2010, 2017, 2021.2]
     elif inst == 2:
         ymin   = 100
         ymax   = 220
@@ -371,7 +371,7 @@ def plot_pha_trend(sfile, indata, inst=1):
         ymin   = 60
         ymax   = 190
         #bpoint = 2012
-        bpoints = [2012, 2017]
+        bpoints = [2012, 2017, 2021.3]
 
 
     title  = 'Median PHA Peak Position'
@@ -395,7 +395,7 @@ def plot_pha_trend(sfile, indata, inst=1):
 #
     a2 = plt.subplot(212)
     width  = separate_data_s2hvst(indata[0], indata[8],  err_bar, indata[21]) 
-    ymin   = 50
+    ymin   = 40
     ymax   = 90
     title  = 'Width of PHA Peak'
     plot_panel(width, xmin, xmax, ymin, ymax, labels, title, psize=4, ebar=0, tpos = 2)

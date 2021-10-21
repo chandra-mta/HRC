@@ -631,7 +631,7 @@ def create_slide_map_pages():
 #
 #--- first check whether there are any years which do not have any data
 #
-        cmd   = 'ls ' + data_dir + name + '/*evt1* > ' +zspace
+        cmd   = 'ls ' + data_dir + name + '/*evt1*fits* > ' +zspace
         os.system(cmd)
 
         data = mcf.read_data_file(zspace, remove=1)

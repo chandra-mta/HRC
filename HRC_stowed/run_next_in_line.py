@@ -6,7 +6,7 @@
 #                                                                                           #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                   #
 #                                                                                           #
-#               last update: Mar 21, 2021                                                   #
+#               last update: Oct 20, 2021                                                   #
 #                                                                                           #
 #############################################################################################
 
@@ -386,12 +386,12 @@ def extract_data_and_combine(time_list, detector, level, filetype, name, fcol_li
         mcf.rm_file(ent)
 
 #-----------------------------------------------------------------------------------------------
-#-- get_time_period_engineer_data: extract time period in which hrc engireer data gives 2preads=hrc type
+#-- get_time_period_engineer_data: extract time period in which hrc engireer data gives 2pre*ds=hrc type
 #-----------------------------------------------------------------------------------------------
 
 def get_time_period_engineer_data(time_list, hrc_type, start, stop):
     """
-    extract time period in which hrc engireer data gives  2preads=hrc type
+    extract time period in which hrc engireer data gives  2pre<a/b>ds=hrc type
     input:  time_list   --- a list of lists of starting and stoppping time
                             from previous condition
             hrc_type    --- hrc type either IMG or SPEC
@@ -400,13 +400,20 @@ def get_time_period_engineer_data(time_list, hrc_type, start, stop):
     output: rlist       --- a list of lists of starting and stoppping time
     """
 #
+#--- HRC Side changed from side A to side B on Aug 24, 2020.
+#
+    if stop < 714614394:
+        msid = '2PREADS'
+    else:
+        msid = '2PREBDS'
+#
 #--- extract hrc engineer fits files
 #
     fits_list = extract_fits_files(time_list, 'hrc', '0', 'hrc2eng', subdetector='eng')
 #
 #--- extract data needed
 #
-    dout = hcf.combine_and_select_data(fits_list, ['time','2PREADS'])
+    dout = hcf.combine_and_select_data(fits_list, ['time', msid])
     try:
         chk = float(dout[0][0])
         if chk > 1000:
@@ -416,9 +423,9 @@ def get_time_period_engineer_data(time_list, hrc_type, start, stop):
     except:
         return [[], []]
 #
-#--- select time with 2preads == hrc_type (either hrc i or hrc s coditino)
+#--- select time with 2pre<a/b>ds == hrc_type (either hrc i or hrc s coditino)
 #
-    odata = hcf.select_data_with_condition(dout ,'2PREADS', '==', hrc_type)
+    odata = hcf.select_data_with_condition(dout, msid, '==', hrc_type)
 #
 #--- get lists of start and stop time periods
 #
@@ -729,12 +736,16 @@ def create_hk_fits_with_extracted_data(start, stop):
     except:
         return []
 #
-#--- the condition differs before and after 2012 Apr.
+#--- the condition differs before and after 2012 Apr and 2021 Jan.
 #
-    if stop <= 449452797:
+    if stop <= 449452797:           #--- 2012:090:00:00:00
         hlist = ('hrc_i_90','hrc_i_115', 'hrc_s_125_1', 'hrc_s_125_hi_1', 'hrc_s_90_1', 'hrc_s_90_hi_1')
-    else:
+
+    elif stop <= 714614394:         #--- 2020:237:00:00:00 (after this date, changed side A to side B)
         hlist = ('hrc_i_90','hrc_i_115', 'hrc_s_125_2', 'hrc_s_125_hi_2', 'hrc_s_90_2', 'hrc_s_90_hi_2')
+
+    else:
+        hlist = ('hrc_i_90','hrc_i_115_2', 'hrc_s_125_3', 'hrc_s_125_hi_3', 'hrc_s_90_2', 'hrc_s_90_hi_2')
 
     for cfile in hlist:
 #
@@ -788,7 +799,7 @@ def read_condition(cfile):
     test  = str(cfile)
     test2 = test[-2:]           #--- checking the last two character
 
-    if test2 == '_1' or test2 == '_2':
+    if test2 in ['_1', '_2', '_3']:
         test = test[:-2]
 
     fits = test + '.fits'
@@ -1267,40 +1278,19 @@ if __name__ == "__main__":
     test = 0
     if len(sys.argv) == 2:
         if sys.argv[1] == 'test':
-            test = 1
-            del sys.argv[1:]
+            unittest.main()
         else:
             exit(1)
 
-    elif len(sys.argv) == 3:
-        syear  = int(float(sys.argv[1]))
-        smonth = int(float(sys.argv[2]))
-        eyear  = syear
-        emonth = eyear
-    elif len(sys.argv) == 5:
-        syear  = int(float(sys.argv[1]))
-        smonth = int(float(sys.argv[2]))
+    elif len(sys.argv) == 6:
+        begin  = sys.argv[1]
+        end    = sys.argv[2]
         eyear  = int(float(sys.argv[3]))
         emonth = int(float(sys.argv[4]))
-#
-#--- if the date period is not specified,
-#--- the period is set from the last entry date to
-#--- the last day of the last month
-#
-    else:
-        syear  = ''
-        smonth = ''
-        eyear  = ''
-        emonth = ''
-
-    if test == 0:
-        lmon = mcf.change_month_format(smonth)
-        lmon = lmon.upper()
-        outdir = str(syear) + lmon
-
-        ####extract_next_in_line_data(syear, smonth, eyear, emonth, outdir)
-#following is not working --- you need to change the time formats!!
+        outdir = sys.argv[5]
+    
         extract_next_in_line_data(begin, end, start, stop, outdir)
+
     else:
-        unittest.main()
+        print("Please privide: begin end (in mm/dd/yy:hh:mm:ss) start, stop (in chandra time) outdir")
 
